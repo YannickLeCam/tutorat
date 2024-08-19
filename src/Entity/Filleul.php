@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FilleulRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FilleulRepository::class)]
@@ -36,6 +38,17 @@ class Filleul
     #[ORM\ManyToOne(inversedBy: 'filleuls')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Parrain $parrain = null;
+
+    /**
+     * @var Collection<int, ParrainAppreciation>
+     */
+    #[ORM\OneToMany(targetEntity: ParrainAppreciation::class, mappedBy: 'filleul')]
+    private Collection $parrainAppreciations;
+
+    public function __construct()
+    {
+        $this->parrainAppreciations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -122,6 +135,36 @@ class Filleul
     public function setParrain(?Parrain $parrain): static
     {
         $this->parrain = $parrain;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ParrainAppreciation>
+     */
+    public function getParrainAppreciations(): Collection
+    {
+        return $this->parrainAppreciations;
+    }
+
+    public function addParrainAppreciation(ParrainAppreciation $parrainAppreciation): static
+    {
+        if (!$this->parrainAppreciations->contains($parrainAppreciation)) {
+            $this->parrainAppreciations->add($parrainAppreciation);
+            $parrainAppreciation->setFilleul($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParrainAppreciation(ParrainAppreciation $parrainAppreciation): static
+    {
+        if ($this->parrainAppreciations->removeElement($parrainAppreciation)) {
+            // set the owning side to null (unless already changed)
+            if ($parrainAppreciation->getFilleul() === $this) {
+                $parrainAppreciation->setFilleul(null);
+            }
+        }
 
         return $this;
     }

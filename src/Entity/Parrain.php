@@ -27,9 +27,16 @@ class Parrain
     #[ORM\OneToMany(targetEntity: Filleul::class, mappedBy: 'parrain')]
     private Collection $filleuls;
 
+    /**
+     * @var Collection<int, ParrainAppreciation>
+     */
+    #[ORM\OneToMany(targetEntity: ParrainAppreciation::class, mappedBy: 'parrain')]
+    private Collection $parrainAppreciations;
+
     public function __construct()
     {
         $this->filleuls = new ArrayCollection();
+        $this->parrainAppreciations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,6 +92,36 @@ class Parrain
             // set the owning side to null (unless already changed)
             if ($filleul->getParrain() === $this) {
                 $filleul->setParrain(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ParrainAppreciation>
+     */
+    public function getParrainAppreciations(): Collection
+    {
+        return $this->parrainAppreciations;
+    }
+
+    public function addParrainAppreciation(ParrainAppreciation $parrainAppreciation): static
+    {
+        if (!$this->parrainAppreciations->contains($parrainAppreciation)) {
+            $this->parrainAppreciations->add($parrainAppreciation);
+            $parrainAppreciation->setParrain($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParrainAppreciation(ParrainAppreciation $parrainAppreciation): static
+    {
+        if ($this->parrainAppreciations->removeElement($parrainAppreciation)) {
+            // set the owning side to null (unless already changed)
+            if ($parrainAppreciation->getParrain() === $this) {
+                $parrainAppreciation->setParrain(null);
             }
         }
 
