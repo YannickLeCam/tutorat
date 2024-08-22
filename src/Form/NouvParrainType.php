@@ -2,12 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\Parrain;
 use App\Entity\Top;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Parrain;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class NouvParrainType extends AbstractType
 {
@@ -18,8 +19,9 @@ class NouvParrainType extends AbstractType
             ->add('prenom')
             ->add('top', EntityType::class, [
                 'class' => Top::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
+            ->add('Valider',SubmitType::class)
         ;
     }
 

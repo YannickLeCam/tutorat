@@ -6,6 +6,7 @@ use App\Entity\Top;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class NouvTopType extends AbstractType
 {
@@ -14,6 +15,8 @@ class NouvTopType extends AbstractType
         $builder
             ->add('nom')
             ->add('prenom')
+            ->add('Valider',SubmitType::class)
+
         ;
     }
 

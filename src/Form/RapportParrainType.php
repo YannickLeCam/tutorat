@@ -5,10 +5,11 @@ namespace App\Form;
 use App\Entity\Filleul;
 use App\Entity\Parrain;
 use App\Entity\ParrainAppreciation;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class RapportParrainType extends AbstractType
 {
@@ -23,12 +24,14 @@ class RapportParrainType extends AbstractType
             ])
             ->add('filleul', EntityType::class, [
                 'class' => Filleul::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
             ->add('parrain', EntityType::class, [
                 'class' => Parrain::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
+            ->add('Valider',SubmitType::class)
+
         ;
     }
 
