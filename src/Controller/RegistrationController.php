@@ -89,8 +89,8 @@ class RegistrationController extends AbstractController
             $roleSet = ['ROLE_PARRAIN'];
         }elseif ($role === 'top') {
             $roleSet = ['ROLE_TOP'];
-        }elseif ('admin') {
-            $roleSet = ['ROLE_ADMIN'];
+        }elseif ($role === 'direction') {
+            $roleSet = ['ROLE_DIRECTION'];
         }else {
             //Faire un message d'erreur
             $roleSet = ['ROLE_PARRAIN'];

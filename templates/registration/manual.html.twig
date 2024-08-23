@@ -8,15 +8,13 @@
     <ul>
         <li><a href="{{path('app_registerManual',{role:'parrain'})}}">Parrain</a></li>
         <li><a href="{{path('app_registerManual',{role:'top'})}}">Top</a></li>
-        <li><a href="{{path('app_registerManual',{role:'admin'})}}">Admin</a></li>
+        <li><a href="{{path('app_registerManual',{role:'direction'})}}">Direction</a></li>
     </ul>
 </nav>
 <h1>Ajouter un nouveau {{role}}</h1>
 {{ form_start(form) }}
     {{ form_row(form.email) }}
-    {% if  role != 'admin' %}
-        {{ form_row(form.idRole) }}
-    {% endif %}
+    {{ form_row(form.idRole) }}
     {{ form_row(form.password) }}
     {{ form_row(form.isVerified) }}
     {{ form_row(form.Valider) }}

@@ -13,16 +13,20 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\User;
+use App\Repository\DirectionRepository;
+use Symfony\Component\Validator\Constraints\Choice;
 
 class NouvAccountType extends AbstractType
 {
     private $topRepository;
     private $parrainRepository;
+    private $directionRepository;
 
-    public function __construct(TopRepository $topRepository, ParrainRepository $parrainRepository)
+    public function __construct(TopRepository $topRepository, ParrainRepository $parrainRepository , DirectionRepository $directionRepository)
     {
         $this->topRepository = $topRepository;
         $this->parrainRepository = $parrainRepository;
+        $this->directionRepository = $directionRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -47,6 +51,10 @@ class NouvAccountType extends AbstractType
             } elseif ($role === 'ROLE_TOP') {
                 $form->add('idRole', ChoiceType::class, [
                     'choices' => $this->getTops(),
+                ]);
+            }elseif($role === 'ROLE_DIRECTION'){
+                $form->add('idRole' , ChoiceType::class , [
+                    'choices'=>$this->getDirections(),
                 ]);
             }
             // Pas besoin d'ajouter idRole si le rôle est Admin
@@ -97,4 +105,17 @@ class NouvAccountType extends AbstractType
 
         return $choices;
     }
+
+        // Méthode pour récupérer la direction
+        private function getDirections(): array
+        {
+            $directions = $this->directionRepository->findAll();
+    
+            $choices = [];
+            foreach ($directions as $direction) {
+                $choices[$direction->getNom()] = $direction->getId(); // Remplacer getNom() et getId() par les méthodes appropriées
+            }
+    
+            return $choices;
+        }
 }
