@@ -90,4 +90,8 @@ class Top
 
         return $this;
     }
+    public function __toString()
+    {
+        return "$this->prenom $this->nom";
+    }
 }

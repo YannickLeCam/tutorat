@@ -25,6 +25,7 @@ class HomeController extends AbstractController
                     $user = $repositoryParrain->findOneBy(['id'=>$idRole]);
                 }
                 
+                
             }elseif ($role[0]=== 'ROLE_TOP') {
                 $idRole = $user->getIdRole();
                 if ($idRole!=null) {

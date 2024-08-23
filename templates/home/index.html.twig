@@ -6,4 +6,43 @@
 
     <h1>Bonjour {{user.prenom}} {{user.nom}} !</h1>
     <p>Comment ca va ?</p>
+
+
+    <p>Mon référant est : {{user.top}}</p>
+    {% if user.filleuls | length >0 %}
+        <table>
+            <thead>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Dernière Appréciation</th>
+                <th>Ajouter une Appréciation</th>
+            </thead>
+            <tbody>
+                {% for filleul in user.filleuls %}
+                <tr>
+                    <td>{{filleul.nom}}</td>
+                    <td>{{filleul.prenom}}</td>
+                    <td>
+                        {% if filleul.parrainAppreciations | length > 0 %}
+                        <table>
+                            <thead>
+                                <th>Appréciation</th>
+                                <th>Humeur</th>
+                                <th>Travail</th>
+                                <th>Date</th>
+                            </thead>
+                            <tbody>
+                                {{filleul.parrainAppreciations|last|raw}}
+                            </tbody>
+                        </table>
+                        {% else %}
+                            <p>Pas encore d'Appréciation</p>
+                        {% endif %}
+                    </td>
+                    <td>+</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}

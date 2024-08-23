@@ -109,4 +109,24 @@ class ParrainAppreciation
 
         return $this;
     }
+
+    public function __toString()
+    {
+        // Échappe les valeurs pour éviter les failles XSS
+        $appreciation = htmlspecialchars($this->appreciation, ENT_QUOTES, 'UTF-8');
+        $humeur = htmlspecialchars($this->humeur, ENT_QUOTES, 'UTF-8');
+        $travail = htmlspecialchars($this->travail, ENT_QUOTES, 'UTF-8');
+        $dateCreation = $this->dateCreation->format('d m Y');
+        // Construction de la chaîne HTML avec sprintf pour plus de lisibilité
+        $htmlContent = sprintf(
+            '<td>%s</td><td>%s</td><td>%s</td><td>%s</td>',
+            $appreciation,
+            $humeur,
+            $travail,
+            $dateCreation
+        );
+    
+        return $htmlContent;
+    }
+    
 }
