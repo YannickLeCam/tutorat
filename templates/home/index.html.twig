@@ -39,7 +39,7 @@
                             <p>Pas encore d'Appréciation</p>
                         {% endif %}
                     </td>
-                    <td>+</td>
+                    <td><a href="{{path('appreciation.new',{idFilleul:filleul.id,idParrain:user.id})}}">+</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
