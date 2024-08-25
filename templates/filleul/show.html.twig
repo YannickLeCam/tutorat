@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FilleulController!{% endblock %}
+
+{% block body %}
+    <h1>Profile de {{filleul.nom}} {{filleul.prenom}}</h1>
+
+    <p>Mon referent est : {{filleul.parrain}}</p>
+
+    {% if filleul.parrainAppreciations | length >0 %}
+    <table>
+        <thead>
+            <th>Appreciation</th>
+            <th>Humeur</th>
+            <th>Travail</th>
+            <th>Date de création</th>
+        </thead>
+        <tbody>
+            {% for appreciation in filleul.parrainAppreciations %}
+                <tr>
+                    {{appreciation | raw}}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FilleulController!{% endblock %}
+
+{% block body %}
+    {% for filleul in filleuls %}
+        <li><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}} {{filleul.nom}}</a></li>
+    {% endfor %}
+{% endblock %}
