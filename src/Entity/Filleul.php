@@ -45,6 +45,9 @@ class Filleul
     #[ORM\OneToMany(targetEntity: ParrainAppreciation::class, mappedBy: 'filleul')]
     private Collection $parrainAppreciations;
 
+    #[ORM\ManyToOne(inversedBy: 'filleuls')]
+    private ?Faculte $faculte = null;
+
     public function __construct()
     {
         $this->parrainAppreciations = new ArrayCollection();
@@ -165,6 +168,18 @@ class Filleul
                 $parrainAppreciation->setFilleul(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFaculte(): ?Faculte
+    {
+        return $this->faculte;
+    }
+
+    public function setFaculte(?Faculte $faculte): static
+    {
+        $this->faculte = $faculte;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Faculte;
 use App\Entity\Filleul;
 use App\Entity\Mineure;
 use App\Entity\Parrain;
@@ -34,6 +35,10 @@ class NouvFilleulType extends AbstractType
             ->add('parrain', EntityType::class, [
                 'class' => Parrain::class,
                 'choice_label' => 'nom',
+            ])
+            ->add('faculte',EntityType::class,[
+                'class'=> Faculte::class,
+                'choice_label' => 'name',
             ])
             ->add('Valider',SubmitType::class)
         ;

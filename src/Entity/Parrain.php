@@ -36,6 +36,9 @@ class Parrain
     #[ORM\ManyToOne(inversedBy: 'parrains')]
     private ?Top $top = null;
 
+    #[ORM\ManyToOne(inversedBy: 'parrains')]
+    private ?Faculte $faculte = null;
+
     public function __construct()
     {
         $this->filleuls = new ArrayCollection();
@@ -146,5 +149,17 @@ class Parrain
     public function __toString()
     {
         return "$this->nom $this->prenom";
+    }
+
+    public function getFaculte(): ?Faculte
+    {
+        return $this->faculte;
+    }
+
+    public function setFaculte(?Faculte $faculte): static
+    {
+        $this->faculte = $faculte;
+
+        return $this;
     }
 }

@@ -27,6 +27,9 @@ class Top
     #[ORM\OneToMany(targetEntity: Parrain::class, mappedBy: 'top')]
     private Collection $parrains;
 
+    #[ORM\ManyToOne(inversedBy: 'tops')]
+    private ?Faculte $faculte = null;
+
     public function __construct()
     {
         $this->parrains = new ArrayCollection();
@@ -93,5 +96,17 @@ class Top
     public function __toString()
     {
         return "$this->prenom $this->nom";
+    }
+
+    public function getFaculte(): ?Faculte
+    {
+        return $this->faculte;
+    }
+
+    public function setFaculte(?Faculte $faculte): static
+    {
+        $this->faculte = $faculte;
+
+        return $this;
     }
 }
