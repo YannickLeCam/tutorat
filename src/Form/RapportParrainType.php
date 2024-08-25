@@ -19,17 +19,6 @@ class RapportParrainType extends AbstractType
             ->add('appreciation')
             ->add('humeur')
             ->add('travail')
-            ->add('dateCreation', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('filleul', EntityType::class, [
-                'class' => Filleul::class,
-                'choice_label' => 'nom',
-            ])
-            ->add('parrain', EntityType::class, [
-                'class' => Parrain::class,
-                'choice_label' => 'nom',
-            ])
             ->add('Valider',SubmitType::class)
 
         ;
