@@ -74,7 +74,7 @@ class TopController extends AbstractController
             }
 
             if ($data->getPrenom()) {
-                $criteria['prenom'] = $data->getPrenom();
+                $criteria['prenom'] = $data->getPrenom(); 
             }
 
             if ($data->getFaculte()) {

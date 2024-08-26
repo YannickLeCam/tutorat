@@ -31,30 +31,42 @@ class FilleulController extends AbstractController
         ]);
     }
 
-    #[Route('/filleul/new',name:'app_filleul.new')]
-    #[Route('/filleul/edit-{id}',name:'app_filleul.edit')]
-    public function new(Filleul $filleul=null,Request $request,EntityManagerInterface $em):Response
+    #[Route('/filleul/new', name: 'app_filleul.new')]
+    #[Route('/filleul/edit-{id}', name: 'app_filleul.edit')]
+    public function new(Filleul $filleul = null, Request $request, EntityManagerInterface $em): Response
     {
-        //Faire une verification que l'utilisateur est bien un Admin ou un membre de la direction
-        if (!$filleul) {
+        $isEdit = $filleul !== null;
+
+        if (!$isEdit) {
             $filleul = new Filleul();
         }
-        $form = $this->createForm(NouvFilleulType::class , $filleul);
+
+        $top = null;
+        if ($isEdit && $filleul->getParrain()) {
+            $top = $filleul->getParrain()->getTop();
+        }
+
+        $form = $this->createForm(NouvFilleulType::class, $filleul, [
+            'edit_mode' => $isEdit,
+            'top' => $top,
+        ]);
+
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() ) {
-            $newFilleul= $form->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newFilleul = $form->getData();
             $em->persist($newFilleul);
             $em->flush();
-            $this->addFlash('success','Vous avez bien ajouté un nouveau filleul !');
+
+            $this->addFlash('success', 'Vous avez bien ajouté un nouveau filleul !');
             return $this->redirectToRoute('app_home');
-        }else {
-            $this->addFlash('error','Il semble avoir eu une erreur lors de l\'ajout du filleul');
         }
 
         return $this->render('filleul/new.html.twig', [
             'controller_name' => 'FilleulController',
-            'form'=> $form,
+            'form' => $form->createView(),
         ]);
     }
+
+    
 }
