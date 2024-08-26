@@ -18,47 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ParrainController extends AbstractController
 {
-    #[Route('/parrain', name: 'app_parrain')]
-    #[Route('/parrain/{research}', name: 'app_parrain.faculte')]
-    public function index(Request $request, ParrainRepository $parrainRepository): Response
-    {
-        // Créer le formulaire de recherche
-        $formRecherche = $this->createForm(RechercheParrainType::class, new Parrain());
-        $formRecherche->handleRequest($request);
-
-        $criteria = [];
-        if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
-            // Récupérer les données du formulaire
-            $data = $formRecherche->getData();
-
-            // Ajouter les critères en fonction des champs remplis
-            if ($data->getNom()) {
-                $criteria['nom'] = $data->getNom();
-            }
-
-            if ($data->getPrenom()) {
-                $criteria['prenom'] = $data->getPrenom();
-            }
-
-            if ($data->getTop()) {
-                $criteria['top'] = $data->getTop();
-            }
-
-            if ($data->getFaculte()) {
-                $criteria['faculte'] = $data->getFaculte();
-            }
-        }
-
-        // Utiliser findBy avec les critères
-        $parrains = $parrainRepository->findBy($criteria);
-
-        return $this->render('parrain/index.html.twig', [
-            'controller_name' => 'ParrainController',
-            'parrains' => $parrains,
-            'formRecherche' => $formRecherche->createView(),
-        ]);
-    }
-
     #[Route('/parrain/show-{id}',name:'app_parrain.show')]
     public function show(Parrain $parrain):Response
     {
@@ -122,6 +81,46 @@ class ParrainController extends AbstractController
         return $this->render('parrain/appreciation.html.twig', [
             'controller_name' => 'Appreciation',
             'form'=>$form,
+        ]);
+    }
+
+    #[Route('/parrain', name: 'app_parrain')]
+    public function index(Request $request, ParrainRepository $parrainRepository): Response
+    {
+        // Créer le formulaire de recherche
+        $formRecherche = $this->createForm(RechercheParrainType::class, new Parrain());
+        $formRecherche->handleRequest($request);
+
+        $criteria = [];
+        if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
+            // Récupérer les données du formulaire
+            $data = $formRecherche->getData();
+
+            // Ajouter les critères en fonction des champs remplis
+            if ($data->getNom()) {
+                $criteria['nom'] = $data->getNom();
+            }
+
+            if ($data->getPrenom()) {
+                $criteria['prenom'] = $data->getPrenom();
+            }
+
+            if ($data->getTop()) {
+                $criteria['top'] = $data->getTop();
+            }
+
+            if ($data->getFaculte()) {
+                $criteria['faculte'] = $data->getFaculte();
+            }
+        }
+
+        // Utiliser findBy avec les critères
+        $parrains = $parrainRepository->searchParrains($criteria);
+
+        return $this->render('parrain/index.html.twig', [
+            'controller_name' => 'ParrainController',
+            'parrains' => $parrains,
+            'formRecherche' => $formRecherche->createView(),
         ]);
     }
 

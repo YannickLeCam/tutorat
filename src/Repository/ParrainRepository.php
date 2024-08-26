@@ -16,6 +16,34 @@ class ParrainRepository extends ServiceEntityRepository
         parent::__construct($registry, Parrain::class);
     }
 
+    public function searchParrains(array $criteria): array
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        if (!empty($criteria['nom'])) {
+            $qb->andWhere('p.nom LIKE :nom')
+               ->setParameter('nom', '%' . $criteria['nom'] . '%');
+        }
+
+        if (!empty($criteria['prenom'])) {
+            $qb->andWhere('p.prenom LIKE :prenom')
+               ->setParameter('prenom', '%' . $criteria['prenom'] . '%');
+        }
+
+        if (!empty($criteria['top'])) {
+            $qb->andWhere('p.top = :top')
+               ->setParameter('top', $criteria['top']);
+        }
+
+        if (!empty($criteria['faculte'])) {
+            $qb->andWhere('p.faculte = :faculte')
+               ->setParameter('faculte', $criteria['faculte']);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+
     //    /**
     //     * @return Parrain[] Returns an array of Parrain objects
     //     */
