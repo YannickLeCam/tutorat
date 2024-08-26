@@ -22,7 +22,6 @@ class NouvTopType extends AbstractType
                 'choice_label' => 'name',
             ])
             ->add('Valider',SubmitType::class)
-
         ;
     }
 
