@@ -16,7 +16,8 @@ class TopRepository extends ServiceEntityRepository
         parent::__construct($registry, Top::class);
     }
 
-    public function findAllFilleuls(int $topId){
+    public function findAllFilleuls(int $topId)
+    {
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQuery(
@@ -30,6 +31,29 @@ class TopRepository extends ServiceEntityRepository
     
         return $query->getResult();
     }
+
+    public function searchTops(array $criteria): array
+    {
+        $qb = $this->createQueryBuilder('t');
+
+        if (!empty($criteria['nom'])) {
+            $qb->andWhere('t.nom LIKE :nom')
+            ->setParameter('nom', '%' . $criteria['nom'] . '%');
+        }
+
+        if (!empty($criteria['prenom'])) {
+            $qb->andWhere('t.prenom LIKE :prenom')
+            ->setParameter('prenom', '%' . $criteria['prenom'] . '%');
+        }
+
+        if (!empty($criteria['faculte'])) {
+            $qb->andWhere('t.faculte = :faculte')
+            ->setParameter('faculte', $criteria['faculte']);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 
     //    /**
     //     * @return Top[] Returns an array of Top objects

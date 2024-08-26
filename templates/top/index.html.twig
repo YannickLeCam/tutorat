@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des tops{% endblock %}
+
+{% block body %}
+    <h1>Liste des Tops</h1>
+
+    {{form(formRecherche)}}
+    {% for top in tops %}
+        <li>{{top.nom}} {{top.prenom}}</li>
+    {% endfor %}
+{% endblock %}
