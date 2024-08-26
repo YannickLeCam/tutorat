@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Parrain;
 use App\Form\RapportParrainType;
 use App\Entity\ParrainAppreciation;
 use App\Repository\FilleulRepository;
@@ -16,26 +17,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ParrainController extends AbstractController
 {
     #[Route('/parrain', name: 'app_parrain')]
-    public function index(): Response
+    public function index(ParrainRepository $parrainRepository): Response
     {
+        $parrains = $parrainRepository->findAll();
         return $this->render('parrain/index.html.twig', [
             'controller_name' => 'ParrainController',
+            'parrains' => $parrains,
         ]);
     }
 
-    // #[Route('/appreciation/{idParrain}-{idFilleul}', name: 'app_parrain.appreciation')]
-    // public function ajoutAppreciation(Request $request,ParrainAppreciation $parrainAppreciation=null,int $idParrain , int $idFilleul, ParrainRepository $parrainAppreciation , FilleulRepository $filleulRepository,EntityManagerInterface $entityManager): Response
-    // {
-    //     if ($parrainAppreciation===null) {
-    //         $parrainAppreciation = new ParrainAppreciation();
-    //     }
+    #[Route('/parrain/show-{id}',name:'app_parrain.show')]
+    public function show(Parrain $parrain):Response
+    {
+        return $this->render('parrain/show.html.twig', [
+            'controller_name' => 'ParrainController',
+            'parrain' => $parrain,
+        ]);
+    }
 
-    //     $form = $this->createForm(RapportParrainType::class,$parrainAppreciation);
-
-    //     return $this->render('parrain/index.html.twig', [
-    //         'controller_name' => 'ParrainController',
-    //     ]);
-    // }
     #[Route('/appreciation/new/{idParrain}-{idFilleul}', name: 'appreciation.new')]
     #[Route('/appreciation/edit-{id}', name: 'appreciation.edit',requirements : ['id'=>'\d+'])]
     public function new(ParrainAppreciation $appreciation = null,int $idParrain,int $idFilleul,Request $request,EntityManagerInterface $em,ParrainRepository $parrainRepository,FilleulRepository $filleulRepository): Response

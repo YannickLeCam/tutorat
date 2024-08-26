@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ParrainController!{% endblock %}
+
+{% block body %}
+    <h1>Liste des Parrains</h1>
+
+    {% for parrain in parrains %}
+        <li>{{parrain.nom}} {{parrain.prenom}}</li>
+    {% endfor %}
+{% endblock %}
