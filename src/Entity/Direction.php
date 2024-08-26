@@ -19,6 +19,9 @@ class Direction
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
+    #[ORM\ManyToOne(inversedBy: 'directions')]
+    private ?Faculte $faculte = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Direction
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getFaculte(): ?Faculte
+    {
+        return $this->faculte;
+    }
+
+    public function setFaculte(?Faculte $faculte): static
+    {
+        $this->faculte = $faculte;
 
         return $this;
     }

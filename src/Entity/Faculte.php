@@ -36,11 +36,18 @@ class Faculte
     #[ORM\OneToMany(targetEntity: Top::class, mappedBy: 'faculte')]
     private Collection $tops;
 
+    /**
+     * @var Collection<int, Direction>
+     */
+    #[ORM\OneToMany(targetEntity: Direction::class, mappedBy: 'faculte')]
+    private Collection $directions;
+
     public function __construct()
     {
         $this->filleuls = new ArrayCollection();
         $this->parrains = new ArrayCollection();
         $this->tops = new ArrayCollection();
+        $this->directions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,6 +151,36 @@ class Faculte
             // set the owning side to null (unless already changed)
             if ($top->getFaculte() === $this) {
                 $top->setFaculte(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Direction>
+     */
+    public function getDirections(): Collection
+    {
+        return $this->directions;
+    }
+
+    public function addDirection(Direction $direction): static
+    {
+        if (!$this->directions->contains($direction)) {
+            $this->directions->add($direction);
+            $direction->setFaculte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDirection(Direction $direction): static
+    {
+        if ($this->directions->removeElement($direction)) {
+            // set the owning side to null (unless already changed)
+            if ($direction->getFaculte() === $this) {
+                $direction->setFaculte(null);
             }
         }
 

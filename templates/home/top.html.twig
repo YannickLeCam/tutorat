@@ -6,8 +6,26 @@
 
     <h1>Bonjour {{user.prenom}} {{user.nom}} !</h1>
 
+    {% if user.parrains | length > 0 %}
+        <h2>Liste des parrains</h2>
+        <table>
+            <thead>
+                <th>Nom</th>
+                <th>Prénom</th>
+            </thead>
+            <tbody>
+                {% for parrain in user.parrains %}
+                    <tr>
+                        <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.nom}}</a></td>
+                        <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.prenom}}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
-    {% if filleuls | length >0 %}
+    {% if filleuls | length > 0 %}
+        <h2>Liste des filleuls</h2>
         <table>
             <thead>
                 <th>Nom</th>
