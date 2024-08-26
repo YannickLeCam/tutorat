@@ -16,6 +16,21 @@ class TopRepository extends ServiceEntityRepository
         parent::__construct($registry, Top::class);
     }
 
+    public function findAllFilleuls(int $topId){
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT f
+             FROM App\Entity\Filleul f
+             JOIN f.parrain p
+             JOIN p.top t
+             WHERE t.id = :topId
+             ORDER BY f.nom ASC' // Tri par nom dans l'ordre croissant
+        )->setParameter('topId', $topId);
+    
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Top[] Returns an array of Top objects
     //     */

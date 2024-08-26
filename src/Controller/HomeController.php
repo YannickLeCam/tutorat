@@ -24,12 +24,17 @@ class HomeController extends AbstractController
                     $user = $repositoryParrain->findOneBy(['id'=>$idRole]);
                 }
                 
-                
             }elseif ($role[0]=== 'ROLE_TOP') {
                 $idRole = $user->getIdRole();
                 if ($idRole!=null) {
                     $user = $topRepository->findOneBy(['id'=>$idRole]);
                 }
+                $filleuls = $topRepository->findAllFilleuls($user->getId());
+                return $this->render('home/top.html.twig',[
+                    'controller-name' => 'HomeController',
+                    'user' => $user,
+                    'filleuls' => $filleuls,
+                ]);
             }elseif ($role[0] === 'ROLE_ADMIN') {
                 
             }elseif ($role[0] === 'ROLE_DIRECTION'){

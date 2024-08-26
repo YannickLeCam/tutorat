@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+
+    <h1>Bonjour {{user.prenom}} {{user.nom}} !</h1>
+
+
+    {% if filleuls | length >0 %}
+        <table>
+            <thead>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Dernière Appréciation</th>
+            </thead>
+            <tbody>
+                {% for filleul in filleuls %}
+                <tr>
+                    <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
+                    <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
+                    <td>
+                        {% if filleul.parrainAppreciations | length > 0 %}
+                        <table>
+                            <thead>
+                                <th>Appréciation</th>
+                                <th>Humeur</th>
+                                <th>Travail</th>
+                                <th>Date</th>
+                            </thead>
+                            <tbody>
+                                {{filleul.parrainAppreciations|last|raw}}
+                            </tbody>
+                        </table>
+                        {% else %}
+                            <p>Pas encore d'Appréciation</p>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
