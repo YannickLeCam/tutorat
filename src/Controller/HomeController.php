@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\DirectionRepository;
 use App\Repository\TopRepository;
 use App\Repository\ParrainRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(ParrainRepository $repositoryParrain,TopRepository $topRepository): Response
+    public function index(ParrainRepository $repositoryParrain,TopRepository $topRepository,DirectionRepository $directionRepository): Response
     {
         $user = $this->getUser();
         if ($user) {
@@ -35,10 +36,17 @@ class HomeController extends AbstractController
                     'user' => $user,
                     'filleuls' => $filleuls,
                 ]);
-            }elseif ($role[0] === 'ROLE_ADMIN') {
-                
-            }elseif ($role[0] === 'ROLE_DIRECTION'){
-
+            }elseif ($role[0] === 'ROLE_ADMIN' || $role[0] === 'ROLE_DIRECTION') {
+                $idRole = $user->getIdRole();
+                if ($idRole!=null) {
+                    $user = $directionRepository->findOneBy(['id'=>$idRole]);
+                }else{
+                    //erreur . . .
+                }
+                return $this->render('home/direction.html.twig',[
+                    'controller-name' => 'HomeController',
+                    'user' => $user,
+                ]);
             }else {
                 //Message d'erreur ... Suspect
             }
