@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FilleulController!{% endblock %}
+
+{% block body %}
+    <h1>Profile de {{direction.nom}} {{direction.prenom}}</h1>
+    <h2>Vient de la facultée : {{direction.faculte.name}}</h2>
+
+{% endblock %}

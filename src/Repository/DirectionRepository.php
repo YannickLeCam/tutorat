@@ -15,7 +15,29 @@ class DirectionRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Direction::class);
     }
-
+    
+    public function searchDirections(array $criteria): array
+    {
+        $qb = $this->createQueryBuilder('d');
+    
+        if (!empty($criteria['nom'])) {
+            $qb->andWhere('d.nom LIKE :nom')
+               ->setParameter('nom', '%' . $criteria['nom'] . '%');
+        }
+    
+        if (!empty($criteria['prenom'])) {
+            $qb->andWhere('d.prenom LIKE :prenom')
+               ->setParameter('prenom', '%' . $criteria['prenom'] . '%');
+        }
+    
+        if (!empty($criteria['faculte'])) {
+            $qb->andWhere('d.faculte = :faculte')
+               ->setParameter('faculte', $criteria['faculte']);
+        }
+    
+        return $qb->getQuery()->getResult();
+    }
+    
     //    /**
     //     * @return Direction[] Returns an array of Direction objects
     //     */
