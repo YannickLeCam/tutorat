@@ -55,7 +55,7 @@ class DirectionController extends AbstractController
         ]);
     }
 
-    #[Route('/direction', name: 'app_direction.index')]
+    #[Route('/direction', name: 'app_direction')]
     public function index(Request $request, DirectionRepository $directionRepository): Response
     {
         // Create the search form
