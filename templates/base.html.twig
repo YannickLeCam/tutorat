@@ -27,11 +27,11 @@
                 <ul class="navbar-nav">
 
                   {% if app.user %}
-                    <li class="nav-item"><a class="nav-link" href="{{path('app_home')}}">Acceuil</a></li>
+                    <li class="nav-item"><a class="nav-link {{controller_name == 'HomeController' ? 'active' : '' }}" href="{{path('app_home')}}">Acceuil</a></li>
 
                     {% if is_granted('ROLE_DIRECTION') %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="{{path('app_filleul')}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle {{controller_name == 'FilleulController' ? 'active' : '' }}" href="{{path('app_filleul')}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Filleul
                             </a>
                             <ul class="dropdown-menu">
@@ -41,7 +41,7 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="{{path('app_parrain')}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle {{controller_name == 'ParrainController' ? 'active' : '' }}" href="{{path('app_parrain')}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Parrain
                             </a>
                             <ul class="dropdown-menu">
@@ -50,8 +50,8 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="{{path('app_top')}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <li class="nav-item dropdown ">
+                            <a class="nav-link dropdown-toggle {{controller_name == 'TopController' ? 'active' : '' }}" href="{{path('app_top')}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Top
                             </a>
                             <ul class="dropdown-menu">
@@ -60,8 +60,8 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="{{path('app_direction')}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <li class="nav-item dropdown ">
+                            <a class="nav-link dropdown-toggle {{controller_name == 'DirectionController' ? 'active' : '' }}" href="{{path('app_direction')}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Direction
                             </a>
                             <ul class="dropdown-menu">
@@ -72,8 +72,8 @@
                     {% endif %}
 
                     {% if is_granted('ROLE_ADMIN') %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="{{path('app_registerManual',{role:'parrain'})}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <li class="nav-item dropdown ">
+                            <a class="nav-link dropdown-toggle {{controller_name == 'RegisterController' ? 'active' : '' }}" href="{{path('app_registerManual',{role:'parrain'})}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Gestion de comptes
                             </a>
                             <ul class="dropdown-menu">
@@ -85,9 +85,9 @@
                     {% endif %}
                     
 
-                    <li class="nav-item"><a class="nav-link" href="{{path('app_logout')}}">Se Déconnecter</a></li>
+                    <li class="nav-item"><a class="nav-link " href="{{path('app_logout')}}">Se Déconnecter</a></li>
                   {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{{path('app_login')}}">Se Connecter</a></li>
+                    <li class="nav-item"><a class="nav-link {{controller_name == 'SecurityController' ? 'active' : '' }}" href="{{path('app_login')}}">Se Connecter</a></li>
                   {% endif %}
 
                 </ul>
