@@ -48,9 +48,16 @@ class Filleul
     #[ORM\ManyToOne(inversedBy: 'filleuls')]
     private ?Faculte $faculte = null;
 
+    /**
+     * @var Collection<int, TopAppreciation>
+     */
+    #[ORM\OneToMany(targetEntity: TopAppreciation::class, mappedBy: 'filleul')]
+    private Collection $topAppreciations;
+
     public function __construct()
     {
         $this->parrainAppreciations = new ArrayCollection();
+        $this->topAppreciations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,6 +187,36 @@ class Filleul
     public function setFaculte(?Faculte $faculte): static
     {
         $this->faculte = $faculte;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TopAppreciation>
+     */
+    public function getTopAppreciations(): Collection
+    {
+        return $this->topAppreciations;
+    }
+
+    public function addTopAppreciation(TopAppreciation $topAppreciation): static
+    {
+        if (!$this->topAppreciations->contains($topAppreciation)) {
+            $this->topAppreciations->add($topAppreciation);
+            $topAppreciation->setFilleul($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopAppreciation(TopAppreciation $topAppreciation): static
+    {
+        if ($this->topAppreciations->removeElement($topAppreciation)) {
+            // set the owning side to null (unless already changed)
+            if ($topAppreciation->getFilleul() === $this) {
+                $topAppreciation->setFilleul(null);
+            }
+        }
 
         return $this;
     }
