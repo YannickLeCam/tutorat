@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TopAppreciationRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TopAppreciationRepository::class)]
@@ -21,6 +22,9 @@ class TopAppreciation
 
     #[ORM\ManyToOne(inversedBy: 'topAppreciations')]
     private ?Top $top = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateCreation = null;
 
     public function getId(): ?int
     {
@@ -59,6 +63,18 @@ class TopAppreciation
     public function setTop(?Top $top): static
     {
         $this->top = $top;
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $dateCreation): static
+    {
+        $this->dateCreation = $dateCreation;
 
         return $this;
     }

@@ -55,6 +55,34 @@ class TopController extends AbstractController
         ]);
     }
 
+    #[Route('/appreciation/new/{idTop}-{idFilleul}', name: 'appreciation.new')]
+    #[Route('/appreciation/edit-{id}', name: 'appreciation.edit',requirements : ['id'=>'\d+'])]
+    public function newAppreciation(TopAppreciation $appreciation = null,int $idTop,int $idFilleul,Request $request,EntityManagerInterface $em,TopRepository $topRepository,FilleulRepository $filleulRepository): Response
+    {
+        if (!$appreciation) {
+            $appreciation = new TopAppreciation();
+            $parrain = $topRepository->findOneBy(['id'=>$idTop]);
+            $appreciation->setTop($parrain);
+            $filleul = $filleulRepository->findOneBy(['id'=>$idFilleul]);
+            $appreciation->setFilleul($filleul);
+            $appreciation->setDateCreation(new DateTime());
+        }
+        $form = $this->createForm(RapportTopType::class , $appreciation);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid() ) {
+            $newAppreciation= $form->getData();
+            $em->persist($newAppreciation);
+            $em->flush();
+            $this->addFlash('success','Vous avez bien ajouté un nouveau stagiaire !');
+            return $this->redirectToRoute('app_home ');
+        }
+
+        return $this->render('parrain/appreciation.html.twig', [
+            'controller_name' => 'Appreciation',
+            'form'=>$form,
+        ]);
+    }
 
     #[Route('/top', name: 'app_top')]
     public function index(Request $request, TopRepository $topRepository): Response
