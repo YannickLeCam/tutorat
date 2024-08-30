@@ -8,6 +8,7 @@
     --blanc : white;
     --bleu : rgba(51,87,154,255);
     --orange : rgba(232,86,17,255);
+    --orangeHover : rgba(229,117,65,255);
 }
 
 body{
@@ -29,6 +30,19 @@ NAV BAR
 
 nav{
     background-color: var(--blanc);
+}
+
+nav::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(1);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--bleu);
+    transform-origin: bottom right;
+    transition: transform 0.5s ease-out;
 }
 
 nav a{
@@ -67,4 +81,38 @@ nav a:hover{
 .nav-item:hover::after,.dropdown-item:hover::after{
     transform: scaleX(1);
     transform-origin: bottom left;
+}
+
+/* 
+==========================================================
+LOGIN FORM
+==========================================================
+*/
+
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20vh 25vw 0 25vw;
+    background-color: var(--bleu);
+    padding: 3% 5% 5% 5%;
+    color: var(--blanc);
+    border-radius: 5px;
+}
+
+#loginForm label{
+    margin-top: 4%;
+}
+
+#loginForm button{
+    margin-top: 4%;
+    background-color: var(--orange) !important;
+    box-shadow: none;
+    border: none;
+    width: 50%;
+}
+
+#loginForm button:hover {
+    background-color : var(--orangeHover) !important;
+    transition: 0.3s;
 }
