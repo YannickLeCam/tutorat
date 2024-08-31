@@ -3,13 +3,16 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\Mineure;
 use App\Entity\Direction;
+use App\Form\NouvMineurType;
 use App\Form\NouvDirectionType;
 use App\Form\RapportDirectionType;
-use App\Entity\DirectionAppreciation;
 use App\Form\RechercheDirectionType;
-use App\Repository\DirectionRepository;
+use App\Entity\DirectionAppreciation;
 use App\Repository\FilleulRepository;
+use App\Repository\MineureRepository;
+use App\Repository\DirectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,6 +55,44 @@ class DirectionController extends AbstractController
         return $this->render('direction/new.html.twig', [
             'controller_name' => 'DirectionController',
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/direction/mineure/new', name: 'app_mineur.new')]
+    #[Route('/direction/mineure/edit-{id}', name: 'app_mineur.edit')]
+    public function newMineur(Mineure $mineure = null, Request $request, EntityManagerInterface $em): Response
+    {
+        // Verify that the user is an Admin or a member of the management team
+        if (!$mineure) {
+            $mineure = new Mineure();
+        }
+
+        $form = $this->createForm(NouvMineurType::class, $mineure);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newMineure = $form->getData();
+            $em->persist($newMineure);
+            $em->flush();
+            $this->addFlash('success', 'You have successfully added a new direction!');
+            return $this->redirectToRoute('app_mineur');
+        } else {
+            $this->addFlash('error', 'An error occurred while adding the direction.');
+        }
+
+        return $this->render('direction/mineurAdd.html.twig', [
+            'controller_name' => 'OtherController',
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/direction/mineure', name: 'app_mineur')]
+    public function listMineur(MineureRepository $mineureRepository): Response
+    {
+        $mineures = $mineureRepository->findAll();
+        return $this->render('direction/mineurList.html.twig', [
+            'controller_name' => 'OtherController',
+            'mineures' => $mineures,
         ]);
     }
 

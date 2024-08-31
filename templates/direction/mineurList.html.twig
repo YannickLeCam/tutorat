@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MineureController!{% endblock %}
+
+{% block body %}
+    <h1>Liste des mineures</h1>
+    <a href="{{path('app_mineur.new')}}"><i class="fa-solid fa-circle-plus" style="color: #3eec32;"></i></a>
+    {% if mineures | length > 0 %}
+        {% for mineure in mineures %}
+            <li>{{mineure.name}} <a href="{{path('app_mineur.edit',{id:mineure.id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a></li>
+        {% endfor %}
+    {% else %}
+        <p>Il n'y pas encore de mineure ajouté . . .</p>
+    {% endif %}
+{% endblock %}
