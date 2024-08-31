@@ -6,7 +6,25 @@
     <h1>Liste des Parrains</h1>
 
     {{form(formRecherche)}}
-    {% for parrain in parrains %}
-        <li>{{parrain.nom}} {{parrain.prenom}}</li>
-    {% endfor %}
+
+    {% if parrains | length > 0 %}
+        <table class="table">
+            <thead>
+                <th>Nom</th>
+                <th>Prénom</th>
+            </thead>
+            <tbody>
+                {% for parrain in parrains %}
+                    <tr>
+                        <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.nom}}</a></td>
+                        <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.prenom}}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    {% else %}
+        <p>Il ne pas avoir de Parrains dans les critères</p>
+    {% endif %}
+
 {% endblock %}
