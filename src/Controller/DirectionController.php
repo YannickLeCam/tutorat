@@ -5,14 +5,17 @@ namespace App\Controller;
 use DateTime;
 use App\Entity\Mineure;
 use App\Entity\Direction;
+use App\Entity\Specialite;
 use App\Form\NouvMineurType;
 use App\Form\NouvDirectionType;
+use App\Form\NouvSpecialiteType;
 use App\Form\RapportDirectionType;
 use App\Form\RechercheDirectionType;
 use App\Entity\DirectionAppreciation;
 use App\Repository\FilleulRepository;
 use App\Repository\MineureRepository;
 use App\Repository\DirectionRepository;
+use App\Repository\SpecialiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,6 +96,44 @@ class DirectionController extends AbstractController
         return $this->render('direction/mineurList.html.twig', [
             'controller_name' => 'OtherController',
             'mineures' => $mineures,
+        ]);
+    }
+
+    #[Route('/direction/specialite/new', name: 'app_specialite.new')]
+    #[Route('/direction/specialite/edit-{id}', name: 'app_specialite.edit')]
+    public function newSpecialite(Specialite $specialite = null, Request $request, EntityManagerInterface $em): Response
+    {
+        // Verify that the user is an Admin or a member of the management team
+        if (!$specialite) {
+            $specialite = new Specialite();
+        }
+
+        $form = $this->createForm(NouvSpecialiteType::class, $specialite);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newSpecialite = $form->getData();
+            $em->persist($newSpecialite);
+            $em->flush();
+            $this->addFlash('success', 'You have successfully added a new direction!');
+            return $this->redirectToRoute('app_mineur');
+        } else {
+            $this->addFlash('error', 'An error occurred while adding the direction.');
+        }
+
+        return $this->render('direction/specialiteAdd.html.twig', [
+            'controller_name' => 'OtherController',
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/direction/specialite', name: 'app_specialite')]
+    public function listSpecialite(SpecialiteRepository $specialiteRepository): Response
+    {
+        $specialites = $specialiteRepository->findAll();
+        return $this->render('direction/specialiteList.html.twig', [
+            'controller_name' => 'OtherController',
+            'specialites' => $specialites,
         ]);
     }
 
