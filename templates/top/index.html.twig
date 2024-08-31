@@ -6,7 +6,23 @@
     <h1>Liste des Tops</h1>
 
     {{form(formRecherche)}}
-    {% for top in tops %}
-        <li>{{top.nom}} {{top.prenom}}</li>
-    {% endfor %}
+
+    {% if tops | length > 0 %}
+        <table class="table">
+            <thead>
+                <th>Nom</th>
+                <th>Prénom</th>
+            </thead>
+            <tbody>
+                {% for top in tops %}
+                    <tr>
+                        <td><a href="{{path('app_top.show',{id:top.id})}}">{{top.nom}}</a></td>
+                        <td><a href="{{path('app_top.show',{id:top.id})}}">{{top.prenom}}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    {% endif %}
+
 {% endblock %}
