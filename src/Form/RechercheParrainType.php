@@ -23,12 +23,12 @@ class RechercheParrainType extends AbstractType
             ])
             ->add('top', EntityType::class, [
                 'class' => Top::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
                 'required' => false, // Le champ 'top' est facultatif
             ])
             ->add('faculte', EntityType::class, [
                 'class' => Faculte::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'required' => false, // Le champ 'faculte' est facultatif
             ])
             ->add('Valider',SubmitType::class)
