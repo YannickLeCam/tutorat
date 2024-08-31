@@ -36,6 +36,7 @@ class Top
     #[ORM\OneToMany(targetEntity: TopAppreciation::class, mappedBy: 'top')]
     private Collection $topAppreciations;
 
+
     public function __construct()
     {
         $this->parrains = new ArrayCollection();

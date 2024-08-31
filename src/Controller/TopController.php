@@ -19,11 +19,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TopController extends AbstractController
 {
     #[Route('/top/show-{id}',name:'app_top.show')]
-    public function show(Top $top):Response
+    public function show(Top $top, TopRepository $topRepository):Response
     {
+        $filleuls = $topRepository->findAllFilleuls($top->getId());
         return $this->render('top/show.html.twig', [
             'controller_name' => 'TopController',
             'top' => $top,
+            'filleuls' => $filleuls
         ]);
     }
 
@@ -55,14 +57,14 @@ class TopController extends AbstractController
         ]);
     }
 
-    #[Route('/appreciation/new/{idTop}-{idFilleul}', name: 'appreciation.new')]
-    #[Route('/appreciation/edit-{id}', name: 'appreciation.edit',requirements : ['id'=>'\d+'])]
+    #[Route('top/appreciation/new/{idTop}-{idFilleul}', name: 'appreciation.top.new')]
+    #[Route('top/appreciation/edit-{id}', name: 'appreciation.top.edit',requirements : ['id'=>'\d+'])]
     public function newAppreciation(TopAppreciation $appreciation = null,int $idTop,int $idFilleul,Request $request,EntityManagerInterface $em,TopRepository $topRepository,FilleulRepository $filleulRepository): Response
     {
         if (!$appreciation) {
             $appreciation = new TopAppreciation();
-            $parrain = $topRepository->findOneBy(['id'=>$idTop]);
-            $appreciation->setTop($parrain);
+            $top = $topRepository->findOneBy(['id'=>$idTop]);
+            $appreciation->setTop($top);
             $filleul = $filleulRepository->findOneBy(['id'=>$idFilleul]);
             $appreciation->setFilleul($filleul);
             $appreciation->setDateCreation(new DateTime());
@@ -74,11 +76,11 @@ class TopController extends AbstractController
             $newAppreciation= $form->getData();
             $em->persist($newAppreciation);
             $em->flush();
-            $this->addFlash('success','Vous avez bien ajouté un nouveau stagiaire !');
+            $this->addFlash('success','Vous avez bien ajouté votre appréciation !');
             return $this->redirectToRoute('app_home ');
         }
 
-        return $this->render('parrain/appreciation.html.twig', [
+        return $this->render('top/appreciation.html.twig', [
             'controller_name' => 'Appreciation',
             'form'=>$form,
         ]);

@@ -32,7 +32,7 @@ class HomeController extends AbstractController
                 }
                 $filleuls = $topRepository->findAllFilleuls($user->getId());
                 return $this->render('home/top.html.twig',[
-                    'controller-name' => 'HomeController',
+                    'controller_name' => 'HomeController',
                     'user' => $user,
                     'filleuls' => $filleuls,
                 ]);
@@ -44,7 +44,7 @@ class HomeController extends AbstractController
                     //erreur . . .
                 }
                 return $this->render('home/direction.html.twig',[
-                    'controller-name' => 'HomeController',
+                    'controller_name' => 'HomeController',
                     'user' => $user,
                 ]);
             }else {
