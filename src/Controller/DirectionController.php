@@ -33,6 +33,16 @@ class DirectionController extends AbstractController
         ]);
     }
 
+    #[Route('/direction/delete-{id}', name: 'app_direction.del')]
+    public function delete(Direction $direction,EntityManagerInterface $em): Response
+    {
+        $em->remove($direction);
+        $em->flush();
+        $this->addFlash('sucess','Vous avez bien supprimé le membre de la direction !');
+
+        return $this->redirectToRoute('app_direction');
+    }
+
     #[Route('/direction/new', name: 'app_direction.new')]
     #[Route('/direction/edit-{id}', name: 'app_direction.edit')]
     public function new(Direction $direction = null, Request $request, EntityManagerInterface $em): Response
