@@ -77,7 +77,7 @@ class TopController extends AbstractController
             $em->persist($newAppreciation);
             $em->flush();
             $this->addFlash('success','Vous avez bien ajouté votre appréciation !');
-            return $this->redirectToRoute('app_home ');
+            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('top/appreciation.html.twig', [

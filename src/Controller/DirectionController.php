@@ -136,6 +136,16 @@ class DirectionController extends AbstractController
             'specialites' => $specialites,
         ]);
     }
+    
+    #[Route('/direction/specialite/delete-{id}', name: 'app_specialite.del')]
+    public function deleteSpecialite(Specialite $specialite,EntityManagerInterface $em): Response
+    {
+        $em->remove($specialite);
+        $em->flush();
+        $this->addFlash('sucess','Vous avez bien supprimé la spécialité !');
+
+        return $this->redirectToRoute('app_speciallite');
+    }
 
     #[Route('/direction', name: 'app_direction')]
     public function index(Request $request, DirectionRepository $directionRepository): Response
