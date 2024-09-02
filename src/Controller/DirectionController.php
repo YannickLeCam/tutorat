@@ -99,6 +99,16 @@ class DirectionController extends AbstractController
         ]);
     }
 
+    #[Route('/direction/mineure/delete-{id}', name: 'app_mineur.del')]
+    public function deleteMineur(Mineure $mineure,EntityManagerInterface $em): Response
+    {
+        $em->remove($mineure);
+        $em->flush();
+        $this->addFlash('sucess','Vous avez bien supprimé la mineur !');
+
+        return $this->redirectToRoute('app_mienur');
+    }
+
     #[Route('/direction/specialite/new', name: 'app_specialite.new')]
     #[Route('/direction/specialite/edit-{id}', name: 'app_specialite.edit')]
     public function newSpecialite(Specialite $specialite = null, Request $request, EntityManagerInterface $em): Response
@@ -136,7 +146,7 @@ class DirectionController extends AbstractController
             'specialites' => $specialites,
         ]);
     }
-    
+
     #[Route('/direction/specialite/delete-{id}', name: 'app_specialite.del')]
     public function deleteSpecialite(Specialite $specialite,EntityManagerInterface $em): Response
     {
