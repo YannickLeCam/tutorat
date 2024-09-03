@@ -7,7 +7,10 @@
     <a href="{{path('app_mineur.new')}}"><i class="fa-solid fa-circle-plus" style="color: #3eec32;"></i></a>
     {% if mineures | length > 0 %}
         {% for mineure in mineures %}
-            <li>{{mineure.name}} <a href="{{path('app_mineur.edit',{id:mineure.id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a></li>
+            <li>{{mineure.name}} 
+                <a href="{{path('app_mineur.edit',{id:mineure.id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a>
+                <a href="{{path('app_mineur.del',{id:mineure.id})}}"><i class="fa-solid fa-trash-can" style="color: #ee5044;"></i></a>
+            </li>
         {% endfor %}
     {% else %}
         <p>Il n'y pas encore de mineure ajouté . . .</p>

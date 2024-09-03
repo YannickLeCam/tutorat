@@ -7,7 +7,7 @@
     <a href="{{path('app_specialite.new')}}"><i class="fa-solid fa-circle-plus" style="color: #3eec32;"></i></a>
     {% if specialites | length > 0 %}
         {% for specialite in specialites %}
-            <li>{{specialite.name}} <a href="{{path('app_specialite.edit',{id:specialite.id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a></li>
+            <li>{{specialite.name}} <a href="{{path('app_specialite.edit',{id:specialite.id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a> <a href="{{path('app_specialite.del',{id:specialite.id})}}"><i class="fa-solid fa-trash-can" style="color: #ee5044;"></i></a></li>
         {% endfor %}
     {% else %}
         <p>Il n'y pas encore de specialité ajouté . .    .</p>
