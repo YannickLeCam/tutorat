@@ -3,13 +3,16 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\Filleul;
 use App\Entity\Mineure;
 use App\Entity\Direction;
 use App\Entity\Specialite;
 use App\Form\NouvMineurType;
 use App\Form\NouvDirectionType;
+use Doctrine\ORM\EntityManager;
 use App\Form\NouvSpecialiteType;
 use App\Form\RapportDirectionType;
+use App\Form\FilleulAssignmentType;
 use App\Form\RechercheDirectionType;
 use App\Entity\DirectionAppreciation;
 use App\Repository\FilleulRepository;
@@ -20,7 +23,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 class DirectionController extends AbstractController
 {
@@ -109,16 +119,114 @@ class DirectionController extends AbstractController
         ]);
     }
 
-    #[Route('/direction/mineure/delete-{id}', name: 'app_mineur.del')]
-    public function deleteMineur(Mineure $mineure,EntityManagerInterface $em): Response
-    {
-        $em->remove($mineure);
-        $em->flush();
-        $this->addFlash('sucess','Vous avez bien supprimé la mineur !');
+// src/Controller/DirectionController.php
 
-        return $this->redirectToRoute('app_mienur');
+// ... le reste du code
+
+#[Route('/mineure/delete/{id}', name: 'app_mineur.del', methods: ['GET', 'POST'])]
+public function deleteMineur(
+    Request $request,
+    Mineure $mineure,
+    EntityManagerInterface $entityManager
+): Response {
+    try {
+        $entityManager->remove($mineure);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Mineure supprimée avec succès.');
+        return $this->redirectToRoute('app_mineure');
+    } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException $e) {
+        $filleuls = $mineure->getFilleuls();
+        $mineures = $entityManager->getRepository(Mineure::class)->findAll();
+
+        // Exclure la mineure actuelle de la liste des mineures disponibles
+        $mineuresDisponibles = array_filter($mineures, fn($m) => $m->getId() !== $mineure->getId());
+
+        // Créer un formulaire pour chaque filleul
+        $forms = [];
+        foreach ($filleuls as $filleul) {
+            $form = $this->createForm(FilleulAssignmentType::class, null, [
+                'mineures_disponibles' => $mineuresDisponibles,
+            ]);
+            $form->handleRequest($request);
+            $forms[$filleul->getId()] = $form->createView(); // Utilisez createView()
+        }
+
+        // Traiter les soumissions du formulaire
+        $formData = [];
+        foreach ($forms as $filleulId => $formView) {
+            if ($request->request->get("form_{$filleulId}_submit")) {
+                $form = $this->createForm(FilleulAssignmentType::class, null, [
+                    'mineures_disponibles' => $mineuresDisponibles,
+                ]);
+                $form->handleRequest($request);
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $formData[$filleulId] = $form->getData();
+                }
+            }
+        }
+
+        if (!empty($formData)) {
+            foreach ($formData as $filleulId => $data) {
+                $filleul = $entityManager->getRepository(Filleul::class)->find($filleulId);
+                $nouvelleMineure = $data['nouvelle_mineure'];
+                $filleul->setMineure($nouvelleMineure);
+                $entityManager->persist($filleul);
+            }
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Filleuls réassignés avec succès.');
+            return $this->redirectToRoute('app_mineur');
+        }
+
+        return $this->render('direction/mineurDeleteError.html.twig', [
+            'controller_name' => 'OtherController',
+            'mineure' => $mineure,
+            'forms' => $forms,
+        ]);
     }
+}
 
+
+    #[Route('/mineure/reassign', name: 'app_mineur.reassign', methods: ['POST'])]
+    public function reassignFilleuls(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer toutes les données envoyées
+        $data = $request->request->all();
+    
+        // Initialiser un tableau pour stocker les ids des filleuls à réaffecter
+        $filleulAssignments = [];
+    
+        // Traiter les données pour extraire les id des filleuls et leur nouvelle mineure
+        foreach ($data as $key => $value) {
+            if (is_numeric($key)) {
+                // Récupérer l'id du filleul et la mineure à laquelle il doit être réaffecté
+                $filleulId = $key;
+                $newMineureId = $value['filleul'] ?? null;
+    
+                if ($newMineureId) {
+                    $filleulAssignments[$filleulId] = $newMineureId;
+                }
+            }
+        }
+    
+        // Traiter les réaffectations
+        foreach ($filleulAssignments as $filleulId => $newMineureId) {
+            $filleul = $entityManager->getRepository(Filleul::class)->find($filleulId);
+            $newMineure = $entityManager->getRepository(Mineure::class)->find($newMineureId);
+    
+            if ($filleul && $newMineure) {
+                $filleul->setMineure($newMineure);
+                $entityManager->persist($filleul);
+            }
+        }
+    
+        $entityManager->flush();
+    
+        $this->addFlash('success', 'Réassignation des filleuls réussie.');
+        return $this->redirectToRoute('app_mineur');
+    }
+    
     #[Route('/direction/specialite/new', name: 'app_specialite.new')]
     #[Route('/direction/specialite/edit-{id}', name: 'app_specialite.edit')]
     public function newSpecialite(Specialite $specialite = null, Request $request, EntityManagerInterface $em): Response
