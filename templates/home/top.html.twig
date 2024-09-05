@@ -31,6 +31,8 @@
                 <th>Nom</th>
                 <th>Prénom</th>
                 <th>Dernière Appréciation</th>
+                <th>Appreciation du Top</th>
+                <th>Action</th>
             </thead>
             <tbody>
                 {% for filleul in filleuls %}
@@ -52,6 +54,23 @@
                         </table>
                         {% else %}
                             <p>Pas encore d'Appréciation</p>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if filleul.topAppreciations | length > 0 %}
+                            {{filleul.topAppreciations | last }}
+                        {% else %}
+                            <p>Pas encore d'appreciation de Mi-Semestre</p>
+                            
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if filleul.topAppreciations | length < 2 %}
+                            <a href="{{path('appreciation.top.new',{idTop:user.id,idFilleul:filleul.id})}}"><i class="fa-solid fa-plus" style="color: #3eec32;"></i></a>
+                        {% endif %}
+                        {% if filleul.topAppreciations | length >= 1 %}
+                            <a href="{{path('appreciation.top.edit',{id:filleul.topAppreciations | last.id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a>
+
                         {% endif %}
                     </td>
                 </tr>

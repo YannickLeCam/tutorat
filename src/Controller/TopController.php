@@ -59,7 +59,7 @@ class TopController extends AbstractController
 
     #[Route('top/appreciation/new/{idTop}-{idFilleul}', name: 'appreciation.top.new')]
     #[Route('top/appreciation/edit-{id}', name: 'appreciation.top.edit',requirements : ['id'=>'\d+'])]
-    public function newAppreciation(TopAppreciation $appreciation = null,int $idTop,int $idFilleul,Request $request,EntityManagerInterface $em,TopRepository $topRepository,FilleulRepository $filleulRepository): Response
+    public function newAppreciation(TopAppreciation $appreciation = null,int $idTop = null,int $idFilleul = null,Request $request,EntityManagerInterface $em,TopRepository $topRepository,FilleulRepository $filleulRepository): Response
     {
         if (!$appreciation) {
             $appreciation = new TopAppreciation();
