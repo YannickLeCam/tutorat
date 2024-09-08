@@ -18,7 +18,7 @@
             </div>
             
             <div id="listeParrains" class="hide">
-                <table>
+                <table class="table table-striped table-hover">
                     <thead>
                         <th>Nom</th>
                         <th>Prénom</th>
@@ -38,58 +38,62 @@
         {% endif %}
     
         {% if filleuls | length > 0 %}
-            <h2>Liste des filleuls</h2>
-            <table>
-                <thead>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Dernière Appréciation</th>
-                    <th>Appreciation du Top</th>
-                    <th>Action</th>
-                </thead>
-                <tbody>
-                    {% for filleul in filleuls %}
-                    <tr>
-                        <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
-                        <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
-                        <td>
-                            {% if filleul.parrainAppreciations | length > 0 %}
-                            <table>
-                                <thead>
-                                    <th>Appréciation</th>
-                                    <th>Humeur</th>
-                                    <th>Travail</th>
-                                    <th>Date</th>
-                                </thead>
-                                <tbody>
-                                    {{filleul.parrainAppreciations|last|raw}}
-                                </tbody>
-                            </table>
-                            {% else %}
-                                <p>Pas encore d'Appréciation</p>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if filleul.topAppreciations | length > 0 %}
-                                {{filleul.topAppreciations | last }}
-                            {% else %}
-                                <p>Pas encore d'appreciation de Mi-Semestre</p>
-                                
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if filleul.topAppreciations | length < 2 %}
-                                <a href="{{path('appreciation.top.new',{idTop:user.id,idFilleul:filleul.id})}}"><i class="fa-solid fa-plus" style="color: #3eec32;"></i></a>
-                            {% endif %}
-                            {% if filleul.topAppreciations | length >= 1 %}
-                                <a href="{{path('appreciation.top.edit',{id:filleul.topAppreciations | last.id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a>
-    
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div id="titreFilleuls">
+                <h2>Liste des filleuls</h2>
+                <div class="buttonPlus">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="buttonMoins hide">
+                    <i class="fa-solid fa-minus"></i>
+                </div>
+            </div>
+            <div id="listeFilleuls">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Dernière Appréciation</th>
+                        <th>Appreciation du Top</th>
+                        <th>Action</th>
+                    </thead>
+                    <tbody>
+                        {% for filleul in filleuls %}
+                        <tr>
+                            <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
+                            <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
+                            <td>
+                                {% if filleul.parrainAppreciations | length > 0 %}
+                                <table class="table">
+                                    <tbody>
+                                        {{filleul.parrainAppreciations|last|raw}}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                    <p>Pas encore d'Appréciation</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if filleul.topAppreciations | length > 0 %}
+                                    {{filleul.topAppreciations | last }}
+                                {% else %}
+                                    <p>Pas encore d'appreciation de Mi-Semestre</p>
+                                    
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if filleul.topAppreciations | length < 2 %}
+                                    <a href="{{path('appreciation.top.new',{idTop:user.id,idFilleul:filleul.id})}}"><i class="fa-solid fa-plus" style="color: #3eec32;"></i></a>
+                                {% endif %}
+                                {% if filleul.topAppreciations | length >= 1 %}
+                                    <a href="{{path('appreciation.top.edit',{id:filleul.topAppreciations | last.id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a>
+        
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% endif %}
     </div>
 

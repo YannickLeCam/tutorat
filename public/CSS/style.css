@@ -19,6 +19,31 @@ li{
     list-style: none;
 }
 
+table{
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th{
+    color: var(--blanc) !important;
+    background-color: var(--bleu) !important;
+}
+
+th , td {
+    text-align: center;
+}
+
+td a {
+    width: 100%;
+    height: 100%;
+    color: var(--bleu);
+}
+
+td a:hover {
+    color: var(--orange);
+    transition: 0.3s;
+}
+
 a{
     text-decoration: none;
 }
@@ -147,12 +172,17 @@ HOME TOP
     color: var(--orange);
 }
 
-#titreParrains{
+#titreParrains,#titreFilleuls{
     position:relative;
-    width: 50%;
+    width: 90%;
     height: 5vh;
+    margin: 5%;
 }
 
+#listeParrains,#listeFilleuls{
+    width: 90%;
+    margin: 0 5%;
+}
 
 .buttonMoins , .buttonPlus {
     position: absolute;
@@ -161,12 +191,12 @@ HOME TOP
     font-size: 3vh;
     color:var(--bleu);
 }
-#titreParrains:hover{
+#titreParrains:hover,#titreFilleuls:hover{
     color: var(--orange);
     transition: 0.3s;
     cursor:pointer;
 }
-#titreParrains:hover .buttonMoins,#titreParrains:hover .buttonPlus {
+#titreParrains:hover .buttonMoins,#titreParrains:hover .buttonPlus ,#titreFilleuls:hover .buttonMoins,#titreFilleuls:hover .buttonPlus {
     color:var(--orange);
     transition: 0.3s;
 } 
