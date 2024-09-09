@@ -47,12 +47,17 @@
                     <i class="fa-solid fa-minus"></i>
                 </div>
             </div>
-            <div id="listeFilleuls">
+            <div id="listeFilleuls" class="hide">
                 <table class="table table-striped table-hover">
                     <thead>
                         <th>Nom</th>
                         <th>Prénom</th>
-                        <th>Dernière Appréciation</th>
+                        
+                        <th>Appreciation</th>
+                        <th>Travail</th>
+                        <th>Humeur</th>
+                        <th>Date</th>
+                        
                         <th>Appreciation du Top</th>
                         <th>Action</th>
                     </thead>
@@ -61,17 +66,17 @@
                         <tr>
                             <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
                             <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
-                            <td>
-                                {% if filleul.parrainAppreciations | length > 0 %}
-                                <table class="table">
-                                    <tbody>
-                                        {{filleul.parrainAppreciations|last|raw}}
-                                    </tbody>
-                                </table>
-                                {% else %}
+
+                            {% if filleul.parrainAppreciations | length > 0 %}
+
+                                {{filleul.parrainAppreciations|last|raw}}
+
+                            {% else %}
+                                <td colspan="4">
                                     <p>Pas encore d'Appréciation</p>
-                                {% endif %}
-                            </td>
+                                </td>
+                            {% endif %}
+
                             <td>
                                 {% if filleul.topAppreciations | length > 0 %}
                                     {{filleul.topAppreciations | last }}
@@ -98,5 +103,6 @@
     </div>
 
     <script src="{{asset('JS/hideParrainList.js')}}"></script>
+    <script src="{{asset('JS/hideFilleulList.js')}}"></script>
     
 {% endblock %}
