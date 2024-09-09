@@ -3,27 +3,59 @@
 {% block title %}Hello FilleulController!{% endblock %}
 
 {% block body %}
-    <h1>Profile de {{filleul.nom}} {{filleul.prenom}}</h1>
+    <div id="wrapper">
+        <h1>Profile de {{filleul.nom}} {{filleul.prenom}}</h1>
 
-    <p>Mon referent est : {{filleul.parrain}}</p>
+        <p>Mon referent est : <a href="{{path('app_parrain.show',{id:filleul.parrain.id})}}">{{filleul.parrain}}</a> </p>
+        <table class="table">
+            <thead>
 
-    {% if filleul.parrainAppreciations | length >0 %}
-    <table>
-        <thead>
-            <th>Appreciation</th>
-            <th>Humeur</th>
-            <th>Travail</th>
-            <th>Date de création</th>
-        </thead>
-        <tbody>
-            {% for appreciation in filleul.parrainAppreciations %}
+                
                 <tr>
-                    {{appreciation | raw}}
+                    <th rowspan="2">Semaine</th>
+                    <th class="title" colspan="4">Appréciation des parrains</th>
+
+                    <th rowspan="2">Appréciation du Top</th>
+                    <th rowspan="2">Action</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
+                <tr>
+                    <th>Appreciation</th>
+                    <th>Travail</th>
+                    <th>Humeur</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in 1..13 %}
+                    <tr>
+                        <td>S{{i}}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+        
+        {% if filleul.parrainAppreciations | length >0 %}
+        <table>
+            <thead>
+                <th>Appreciation</th>
+                <th>Humeur</th>
+                <th>Travail</th>
+                <th>Date de création</th>
+            </thead>
+            <tbody>
+                {% for appreciation in filleul.parrainAppreciations %}
+                    <tr>
+                        {{appreciation | raw}}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
 
 
 {% endblock %}

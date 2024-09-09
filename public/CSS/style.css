@@ -27,15 +27,21 @@ table{
 th{
     color: var(--blanc) !important;
     background-color: var(--bleu) !important;
+
 }
 
 th , td {
     text-align: center;
+    vertical-align:middle;
+    padding: 0 !important;
 }
 
 td a {
+    display: block;
     width: 100%;
     height: 100%;
+    text-decoration: none;
+    padding: 8px; 
     color: var(--bleu);
 }
 
@@ -47,6 +53,14 @@ td a:hover {
 a{
     text-decoration: none;
 }
+
+#wrapper{
+    background-color: var(--blanc);
+    margin: 3% 5%;
+    padding: 3%;
+    border-radius: 10px;
+}
+
 /* 
 ==========================================================
 NAV BAR
@@ -114,15 +128,26 @@ LOGIN FORM
 ==========================================================
 */
 
+#wrapperLogin{
+    background-color: var(--blanc);
+    margin: 3% 5%;
+    padding: 3%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 #loginForm {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20vh 25vw 0 25vw;
-    background-color: var(--bleu);
+    width: 50%;
     padding: 3% 5% 5% 5%;
-    color: var(--blanc);
+    color: var(--bleu);
     border-radius: 5px;
+    border: 3px solid var(--bleu);
 }
 
 #loginForm label{
@@ -203,4 +228,10 @@ HOME TOP
 .hide{
     display: none;
 }
+
+/* 
+==========================================================
+FILLEUL SHOW
+==========================================================
+*/
 
