@@ -14,8 +14,9 @@
                 <tr>
                     <th rowspan="2">Semaine</th>
                     <th class="title" colspan="4">Appréciation des parrains</th>
-
-                    <th rowspan="2">Appréciation du Top</th>
+                    {% if is_granted('ROLE_TOP') or is_granted('ROLE_DIRECTION') %}
+                        <th rowspan="2">Appréciation du Top</th>
+                    {% endif %}
                     <th rowspan="2">Action</th>
                 </tr>
                 <tr>
@@ -29,6 +30,10 @@
                 {% for i in 1..13 %}
                     <tr>
                         <td>S{{i}}</td>
+
+                        {% if is_granted('ROLE_TOP') or is_granted('ROLE_DIRECTION') %}
+                            <td> {{filleul.topAppreciations[0]}}</td>
+                        {% endif %}
 
                     </tr>
                 {% endfor %}
