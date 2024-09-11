@@ -17,7 +17,12 @@
                     {% if is_granted('ROLE_TOP') or is_granted('ROLE_DIRECTION') %}
                         <th rowspan="2">Appréciation du Top</th>
                     {% endif %}
-                    <th rowspan="2">Action</th>
+                    {% if is_granted('ROLE_TOP') and user.id == filleul.parrain.top.id %}
+                        <th rowspan="2">Action</th>
+                    {% endif %}
+                    {% if is_granted('ROLE_PARRAIN') and user.id == filleul.parrain.id %}
+                        <th rowspan="2">Action</th>
+                    {% endif %}
                 </tr>
                 <tr>
                     <th>Appreciation</th>
@@ -30,35 +35,52 @@
                 {% for i in 1..13 %}
                     <tr>
                         <td>S{{i}}</td>
-
-                        {% if is_granted('ROLE_TOP') or is_granted('ROLE_DIRECTION') %}
-                            <td> {{filleul.topAppreciations[0]}}</td>
+                        {% if filleul.parrainAppreciations|length >= i %}
+                            {{filleul.parrainAppreciations[i-1] | raw}}
+                            {% if is_granted('ROLE_PARRAIN') and user.id == filleul.parrain.id %}
+                                <td><a href="{{path('appreciation.edit',{id:filleul.parrainAppreciations[i-1].id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a></td>
+                            {% endif %}
+                        {% else %}
+                            <td colspan="4">Pas d'appréciation de Parrain</td>
+                            {% if is_granted('ROLE_PARRAIN') and user.id == filleul.parrain.id %}
+                                <td><a href="{{path('appreciation.new',{idFilleul:filleul.id,idParrain:user.id})}}"><i class="fa-solid fa-plus" style="color: #3eec32;"></i></a></td>
+                            {% endif %}
                         {% endif %}
 
+                        {% if i == 1 %}
+                            {% if is_granted('ROLE_TOP') or is_granted('ROLE_DIRECTION') %}
+                                {% if filleul.topAppreciations|length > 0 %}
+                                    <td rowspan="6">{{ filleul.topAppreciations[0] }}</td>
+                                    {% if is_granted('ROLE_TOP') and user.id == filleul.parrain.top.id %}
+                                        <td rowspan="6"><a href="{{path('appreciation.top.edit',{id:filleul.topAppreciations[0].id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a></td>
+                                    {% endif %}
+                                {% else %}
+                                    <td rowspan="6">Pas encore d'appréciation du Top</td>
+                                    {% if is_granted('ROLE_TOP') and user.id == filleul.parrain.top.id %}
+                                        <td rowspan="6"><a href="{{path('appreciation.top.new',{idTop:user.id,idFilleul:filleul.id})}}"><i class="fa-solid fa-plus" style="color: #3eec32;"></i></a></td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                        {% if i == 7 %}
+                            {% if is_granted('ROLE_TOP') or is_granted('ROLE_DIRECTION') %}
+                                {% if filleul.topAppreciations|length > 1 %}
+                                    <td rowspan="7">{{ filleul.topAppreciations[1] }}</td>
+                                    {% if is_granted('ROLE_TOP') and user.id == filleul.parrain.top.id %}
+                                        <td rowspan="7"><a href="{{path('appreciation.top.edit',{id:filleul.topAppreciations[1].id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a></td>
+                                    {% endif %}
+                                {% else %}
+                                    <td rowspan="7">Pas encore d'appréciation du Top</td>
+                                    {% if is_granted('ROLE_TOP') and user.id == filleul.parrain.top.id %}
+                                        <td rowspan="7"><a href="{{path('appreciation.top.new',{idTop:user.id,idFilleul:filleul.id})}}"><i class="fa-solid fa-plus" style="color: #3eec32;"></i></a></td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-
-        
-        {% if filleul.parrainAppreciations | length >0 %}
-        <table>
-            <thead>
-                <th>Appreciation</th>
-                <th>Humeur</th>
-                <th>Travail</th>
-                <th>Date de création</th>
-            </thead>
-            <tbody>
-                {% for appreciation in filleul.parrainAppreciations %}
-                    <tr>
-                        {{appreciation | raw}}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% endif %}
     </div>
 
 

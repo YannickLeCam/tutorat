@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Filleul;
 use App\Form\NouvFilleulType;
+use App\Repository\DirectionRepository;
 use App\Repository\FilleulRepository;
+use App\Repository\ParrainRepository;
+use App\Repository\TopRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,10 +27,36 @@ class FilleulController extends AbstractController
     }
 
     #[Route('/filleul/show-{id}', name: 'app_filleul.show')]
-    public function show(Filleul $filleul):Response{
+    public function show(Filleul $filleul, TopRepository $topRepository , ParrainRepository $parrainRepository,DirectionRepository $directionRepository):Response{
+        $user = $this->getUser();
+        if ($user) {
+            $role = $user->getRoles();
+            
+            if ($role[0] === 'ROLE_PARRAIN') {
+                $idRole = $user->getIdRole();
+                if ($idRole!=null) {
+                    $user = $parrainRepository->findOneBy(['id'=>$idRole]);
+                }
+            }elseif ($role[0]=== 'ROLE_TOP') {
+                $idRole = $user->getIdRole();
+                if ($idRole!=null) {
+                    $user = $topRepository->findOneBy(['id'=>$idRole]);
+                }
+            }elseif ($role[0] === 'ROLE_ADMIN' || $role[0] === 'ROLE_DIRECTION') {
+                $idRole = $user->getIdRole();
+                if ($idRole!=null) {
+                    $user = $directionRepository->findOneBy(['id'=>$idRole]);
+                }else{
+                    //erreur . . .
+                }
+            }else {
+                //Message d'erreur ... Suspect
+            }
+        }
         return $this->render('filleul/show.html.twig', [
             'controller_name' => 'FilleulController',
             'filleul'=>$filleul,
+            'user'=>$user,
         ]);
     }
 
