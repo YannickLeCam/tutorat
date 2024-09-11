@@ -61,6 +61,11 @@ a{
     border-radius: 10px;
 }
 
+/* 
+==========================================================
+HUMEUR TRAVAIL TABLE CELLS
+==========================================================
+*/
 .circle {
     display: inline-flex; /* Use inline-flex to make the container shrink to fit the content */
     justify-content: center; /* Center horizontally */

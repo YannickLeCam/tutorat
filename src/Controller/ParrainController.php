@@ -75,7 +75,7 @@ class ParrainController extends AbstractController
             $em->persist($newAppreciation);
             $em->flush();
             $this->addFlash('success','Vous avez bien ajouté un nouveau stagiaire !');
-            return $this->redirectToRoute('app_home ');
+            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('parrain/appreciation.html.twig', [
