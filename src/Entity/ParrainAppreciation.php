@@ -117,16 +117,40 @@ class ParrainAppreciation
         $humeur = htmlspecialchars($this->humeur, ENT_QUOTES, 'UTF-8');
         $travail = htmlspecialchars($this->travail, ENT_QUOTES, 'UTF-8');
         $dateCreation = $this->dateCreation->format('d m Y');
+    
+        // Définir les classes de fond en fonction des valeurs
+        $humeurClass = $this->getColorClass($humeur);
+        $travailClass = $this->getColorClass($travail);
+    
         // Construction de la chaîne HTML avec sprintf pour plus de lisibilité
         $htmlContent = sprintf(
-            '<td>%s</td><td>%s</td><td>%s</td><td>%s</td>',
+            '<td>%s</td><td><span class="%s">%s</span></td><td><span class="%s">%s</span></td><td>%s</td>',
             $appreciation,
-            $humeur,
-            $travail,
+            $humeurClass, $humeur,
+            $travailClass, $travail,
             $dateCreation
         );
     
         return $htmlContent;
     }
+    
+    private function getColorClass($value)
+    {
+        switch ($value) {
+            case 1:
+                return 'circle bg-red';
+            case 2:
+                return 'circle bg-orange';
+            case 3:
+                return 'circle bg-yellow';
+            case 4:
+                return 'circle bg-light-green';
+            case 5:
+                return 'circle bg-dark-green';
+            default:
+                return 'circle';
+        }
+    }
+    
     
 }
