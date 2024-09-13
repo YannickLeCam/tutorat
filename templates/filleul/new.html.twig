@@ -3,5 +3,9 @@
 {% block title %}Hello FilleulController!{% endblock %}
 
 {% block body %}
-    {{form(form)}}
+    <div id="wrapper">
+        <h1>Nouveau Filleul</h1>
+        {{form(form,{'attr': {'class': 'form'}})}}
+    </div>
+    
 {% endblock %}

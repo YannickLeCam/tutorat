@@ -206,7 +206,34 @@ LOGIN FORM
     background-color : var(--orangeHover) !important;
     transition: 0.3s;
 }
+/* 
+==========================================================
+FORM GLOBAL
+==========================================================
+*/
 
+.form{
+    display:flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.form div{
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.form .btn {
+    width: 50%;
+    background-color: var(--orange);
+    border: none;
+}
+
+.form .btn:hover {
+    background-color: var(--orangeHover);
+    transition: 0.3s;
+}
 /* 
 ==========================================================
 HOME

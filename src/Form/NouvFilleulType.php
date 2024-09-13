@@ -1,7 +1,6 @@
 <?php
 namespace App\Form;
 
-
 use App\Entity\Faculte;
 use App\Entity\Filleul;
 use App\Entity\Mineure;
@@ -21,21 +20,32 @@ class NouvFilleulType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class)
-            ->add('prenom', TextType::class)
-            ->add('mail', EmailType::class)
-            ->add('telephone', TextType::class)
+            ->add('nom', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('prenom', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('mail', EmailType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('telephone', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
             ->add('mineure', EntityType::class, [
                 'class' => Mineure::class,
                 'choice_label' => 'name',
+                'attr' => ['class' => 'form-select']
             ])
             ->add('specialite', EntityType::class, [
                 'class' => Specialite::class,
                 'choice_label' => 'name',
+                'attr' => ['class' => 'form-select']
             ])
             ->add('faculte', EntityType::class, [
                 'class' => Faculte::class,
                 'choice_label' => 'name',
+                'attr' => ['class' => 'form-select']
             ])
             ->add('parrain', EntityType::class, [
                 'class' => Parrain::class,
@@ -50,8 +60,14 @@ class NouvFilleulType extends AbstractType
                         return $er->createQueryBuilder('p');
                     }
                 },
+                'attr' => ['class' => 'form-select']
             ])
-            ->add('Valider', SubmitType::class);
+            ->add('Valider', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-primary']
+            ]);
+
+        // Add form class
+        $builder->setAttribute('attr', ['class' => 'custom-form-class']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
