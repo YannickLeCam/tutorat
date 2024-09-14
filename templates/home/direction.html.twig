@@ -3,7 +3,96 @@
 {% block title %}Hello FilleulController!{% endblock %}
 
 {% block body %}
-    Bienvenue <span id="presentation">{{user.prenom}} {{user.nom}}</span>
+    <div id="wrapper">
+        <h1>Bienvenue <span id="presentation">{{user.prenom}} {{user.nom}}</span></h1>
 
-    <p>Faire des cards pour acceder a toute les listes facilement et autrement que par la nav bar</p>
+        <h2>Recherche :</h2>
+        <div id="cardContainer">
+            <div class="card text-center mb-3" >
+                <h5 class="card-title">Filleuls</h5>
+                <div class="card-body">
+                  <p class="card-text">Vous allez pouvoir acceder a la liste des filleuls ou d'en ajouter un nouveau</p>
+                  <a href="{{path('app_filleul')}}" class="btn">Liste</a>
+                  <a href="{{path('app_filleul.new')}}" class="btn">Nouveau</a>
+                </div>
+            </div>
+            <div class="card text-center mb-3">
+                <h5 class="card-title">Parrains</h5>
+                <div class="card-body">
+                  <p class="card-text">Vous allez pouvoir acceder a la liste des parrains ou d'en ajouter un nouveau.</p>
+                  <a href="{{path('app_parrain')}}" class="btn">Liste</a>
+                  <a href="{{path('app_parrain.new')}}" class="btn">Nouveau</a>
+                </div>
+            </div>
+            <div class="card text-center mb-3" >
+                <h5 class="card-title">Tops</h5>
+                <div class="card-body">
+                  <p class="card-text">Vous allez pouvoir acceder a la liste des tops ou d'en ajouter un nouveau.</p>
+                  <a href="{{path('app_top')}}" class="btn">Liste</a>
+                  <a href="{{path('app_top.new')}}" class="btn">Nouveau</a>
+                </div>
+            </div>
+
+                <div class="card text-center mb-3">
+                    <h5 class="card-title">Directions</h5>
+                    <div class="card-body">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <p class="card-text">Vous allez pouvoir acceder a la liste des membres de la directions ou d'en ajouter un nouveau.</p>
+                    {% else %}
+                        <p class="card-text">Vous allez pouvoir acceder a la liste des membres de la directions.</p>
+                    {% endif %}
+                    <a href="{{path('app_direction')}}" class="btn">Liste</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{path('app_direction.new')}}" class="btn">Nouveau</a>
+                    {% endif %}
+                    </div>
+                </div>
+            
+            <div class="card text-center mb-3" >
+                <h5 class="card-title">Specialité</h5>
+                <div class="card-body">
+                  <p class="card-text">Vous allez pouvoir acceder a la liste des spécialités ou d'en ajouter un nouveau.</p>
+                  <a href="{{path('app_specialite')}}" class="btn">Liste</a>
+                  <a href="{{path('app_specialite.new')}}" class="btn">Nouveau</a>
+                </div>
+            </div>
+            <div class="card text-center mb-3" >
+                <h5 class="card-title">Mineures</h5>
+                <div class="card-body">
+                  <p class="card-text">Vous allez pouvoir acceder a la liste des mineures ou d'en ajouter un nouveau.</p>
+                  <a href="{{path('app_mineur')}}" class="btn">Liste</a>
+                  <a href="{{path('app_mineur.new')}}" class="btn">Nouveau</a>
+                </div>
+            </div>
+        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <h2>Gestion de compte :</h2>
+
+            <div id="cardContainer">
+                <div class="card text-center mb-3">
+                    <h5 class="card-title">Parrain</h5>
+                    <div class="card-body">
+                    <p class="card-text">Créer un compte pour un parrain</p>
+                    <a href="{{path('app_registerManual',{role:'parrain'})}}" class="btn">Attribuer un compte</a>
+                    </div>
+                </div>
+                <div class="card text-center mb-3" >
+                    <h5 class="card-title">Tops</h5>
+                    <div class="card-body">
+                        <p class="card-text">Créer un compte pour un top</p>
+                        <a href="{{path('app_registerManual',{role:'top'})}}" class="btn">Attribuer un compte</a>
+                    </div>
+                </div>
+
+                    <div class="card text-center mb-3">
+                        <h5 class="card-title">Directions</h5>
+                        <div class="card-body">
+                        <p class="card-text">Créer un compte pour un membre de la direction</p>
+                        <a href="{{path('app_registerManual',{role:'direction'})}}" class="btn">Attribuer un compte</a>
+                        </div>
+                    </div>
+                
+            </div>
+        {% endif %}
+
 {% endblock %}

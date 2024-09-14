@@ -246,9 +246,39 @@ HOME
 
 /* 
 ==========================================================
-HOME PARRAIN
+HOME DIRECTION
 ==========================================================
 */
+
+#cardContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2%;
+    padding: 3% 5%;
+}
+
+.card {
+    overflow: hidden;
+}
+
+.card-title{
+    background-color: var(--bleu);
+    padding: 5% 0;
+    color: var(--blanc);
+}
+
+#cardContainer .btn{
+    width: 80%;
+    color: white;
+    margin-top: 3%;
+    background-color: var(--orange);
+    border: none;
+}
+
+#cardContainer .btn:hover {
+    background-color: var(--orangeHover);
+    transition: 0.3s;
+}
 
 /* 
 ==========================================================
