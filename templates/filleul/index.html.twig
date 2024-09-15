@@ -3,7 +3,21 @@
 {% block title %}Hello FilleulController!{% endblock %}
 
 {% block body %}
-    {% for filleul in filleuls %}
-        <li><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}} {{filleul.nom}}</a></li>
-    {% endfor %}
+    <div id="wrapper">
+        <table class="table table-striped table-hover">
+            <thead>
+                <th>Nom</th>
+                <th>Prénom</th>
+            </thead>
+            <tbody>
+                {% for filleul in filleuls %}
+                    <tr>
+                        <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
+                        <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
+                    </tr>    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 {% endblock %}
