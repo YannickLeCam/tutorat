@@ -179,14 +179,24 @@ LIST
     display: flex;
 }
 
-.rechercheHeader{
+#rechercheHeader{
     display: flex;
     position: relative;
 }
 
-.rechercheHeader h2{
+#rechercheHeader h2{
     color: var(--bleu);
 }
+
+#rechercheHeader:hover h2 , #rechercheHeader:hover i{
+    color: var(--orange);
+    transition: 0.3s;
+}
+
+/* .rechercheListe:hover{
+    border-color: var(--orange);
+    transition: 0.3s;
+} */
 
 /* 
 ==========================================================
@@ -337,8 +347,9 @@ HOME TOP
 
 .buttonMoins , .buttonPlus {
     position: absolute;
-    right: 2%;
-    top: 10%;
+    right:5%;
+    top:50%; 
+    transform: translate(-50%, -50%);
     font-size: 3vh;
     color:var(--bleu);
 }
