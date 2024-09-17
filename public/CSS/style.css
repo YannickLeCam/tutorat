@@ -164,6 +164,32 @@ nav a:hover{
 
 /* 
 ==========================================================
+LIST
+==========================================================
+*/
+
+.rechercheListe{
+    border: 3px var(--bleu) solid;
+    border-radius: 10px;
+    margin: 5% 0;
+    padding: 1% 2%;
+}
+
+#recherche_parrain{
+    display: flex;
+}
+
+.rechercheHeader{
+    display: flex;
+    position: relative;
+}
+
+.rechercheHeader h2{
+    color: var(--bleu);
+}
+
+/* 
+==========================================================
 LOGIN FORM
 ==========================================================
 */

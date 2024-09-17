@@ -6,7 +6,39 @@
     <div id="wrapper">
         <h1>Liste des Parrains</h1>
         <div class="rechercheListe">
-            {{form(formRecherche)}}
+            <div class="rechercheHeader">
+                <h2>Recherche</h2>
+                <div class="buttonPlus">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="buttonMoins hide">
+                    <i class="fa-solid fa-minus"></i>
+                </div>
+            </div>
+
+            {{ form_start(formRecherche, {'attr': {'class': 'form'}}) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.nom) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.prenom) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.top) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.faculte) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 buttonDivForm">
+                    {{ form_row(formRecherche.Rechercher) }}
+                </div>
+            </div>
+            {{ form_end(formRecherche) }}
         </div>
 
         {% if parrains | length > 0 %}

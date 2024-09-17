@@ -17,21 +17,27 @@ class RechercheParrainType extends AbstractType
         $builder
             ->add('nom', null, [
                 'required' => false, // Le champ 'nom' est facultatif
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('prenom', null, [
                 'required' => false, // Le champ 'prenom' est facultatif
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('top', EntityType::class, [
                 'class' => Top::class,
                 'choice_label' => 'nom',
                 'required' => false, // Le champ 'top' est facultatif
+                'attr' => ['class' => 'form-select']
             ])
             ->add('faculte', EntityType::class, [
                 'class' => Faculte::class,
                 'choice_label' => 'name',
                 'required' => false, // Le champ 'faculte' est facultatif
+                'attr' => ['class' => 'form-select']
             ])
-            ->add('Valider',SubmitType::class)
+            ->add('Rechercher',SubmitType::class, [
+                'attr' => ['class' => 'btn btn-primary']
+            ])
         ;
     }
 
