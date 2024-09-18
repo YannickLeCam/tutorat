@@ -1,32 +1,49 @@
-console.log("Je suis la ");
 document.addEventListener('DOMContentLoaded', (event) => {
     let isObserverInitialized = false;
 
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.type === 'childList' && !isObserverInitialized) {
-                console.log('Changement de page détecté');
                 isObserverInitialized = true;
 
                 const rechercheTitre = document.getElementById('rechercheHeader');
                 const rechercheForm = document.getElementById('formRecherche');
-                console.log(rechercheForm, rechercheTitre);
 
                 if (rechercheTitre && rechercheForm) {
                     rechercheTitre.addEventListener('click', function (e) {
-                        console.log("L'event se passe");
                         const buttonPlus = this.querySelector('.buttonPlus');
                         const buttonMoins = this.querySelector('.buttonMoins');
                         if (buttonPlus && buttonMoins) {
                             rechercheForm.classList.toggle('hide');
                             buttonMoins.classList.toggle('hide');
                             buttonPlus.classList.toggle('hide');
-                        } else {
-                            console.error('Buttons Plus or Moins not found');
                         }
                     });
-                } else {
-                    console.error('rechercheTitre or rechercheForm not found');
+                } 
+                const filleulTitre = document.getElementById('titreFilleuls');
+                const filleulListe = document.getElementById('listeFilleuls');
+
+                if (filleulListe && filleulTitre) {
+                    filleulTitre.addEventListener('click', function (e) {
+                        const buttonPlus = this.querySelector('.buttonPlus');
+                        const buttonMoins = this.querySelector('.buttonMoins');
+                        filleulListe.classList.toggle('hide');
+                        buttonMoins.classList.toggle('hide');
+                        buttonPlus.classList.toggle('hide');
+                    });
+                }
+
+                const parrainTitre = document.getElementById('titreParrains');
+                const parrainListe = document.getElementById('listeParrains');
+
+                if (parrainTitre && parrainListe) {
+                    parrainTitre.addEventListener('click', function (e) {
+                        const buttonPlus = this.querySelector('.buttonPlus');
+                        const buttonMoins = this.querySelector('.buttonMoins');
+                        parrainListe.classList.toggle('hide');
+                        buttonMoins.classList.toggle('hide');
+                        buttonPlus.classList.toggle('hide');
+                    })
                 }
             }
         });
