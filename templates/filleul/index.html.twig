@@ -4,6 +4,7 @@
 
 {% block body %}
     <div id="wrapper">
+        <h1>Liste des Filleuls</h1>
         <div class="rechercheListe" >
             <div id="rechercheHeader">
                 <h2>Recherche</h2>
@@ -94,10 +95,11 @@
 
                             <td>
                                 {% if filleul.topAppreciations | length > 0 %}
-                                    {{filleul.topAppreciations | last }}
+                                    <i class="fa-solid fa-circle-check" style="color: #83f05c;"></i>
+                                    {# {{filleul.topAppreciations | last }} #}
                                 {% else %}
-                                    <p>Pas encore d'appreciation de Mi-Semestre</p>
-                                    
+                                    <i class="fa-solid fa-circle-xmark" style="color: #fe4d4d;"></i>
+                                    {# <p>Pas encore d'appreciation de Mi-Semestre</p> #}
                                 {% endif %}
                             </td>
                         </tr>  
