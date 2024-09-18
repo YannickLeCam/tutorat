@@ -68,7 +68,7 @@
                     <th rowspan="2">Nom</th>
                     <th rowspan="2">Prénom</th>
                     <th class="title" colspan="4">Appréciation des Parrains</th>
-                    <th rowspan="2">Appréciation du Top</th>
+                    <th rowspan="2">App.. Top</th>
                 </tr>
                 <tr>
                     <th>Appreciation</th>
@@ -95,10 +95,10 @@
 
                             <td>
                                 {% if filleul.topAppreciations | length > 0 %}
-                                    <i class="fa-solid fa-circle-check" style="color: #83f05c;"></i>
+                                    <i class="fa-solid fa-circle-check" style="color: #83f05c;font-size: xx-large;"></i>
                                     {# {{filleul.topAppreciations | last }} #}
                                 {% else %}
-                                    <i class="fa-solid fa-circle-xmark" style="color: #fe4d4d;"></i>
+                                    <i class="fa-solid fa-circle-xmark" style="color: #fe4d4d;font-size: xx-large;"></i>
                                     {# <p>Pas encore d'appreciation de Mi-Semestre</p> #}
                                 {% endif %}
                             </td>
