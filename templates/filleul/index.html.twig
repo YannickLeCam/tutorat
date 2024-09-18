@@ -16,7 +16,7 @@
             </div>
 
             {{ form_start(formRecherche, {'attr': {'class': 'form hide','id' : "formRecherche"}}) }}
-            
+
             <div class="row">
                 <div class="col-md-6">
                     {{ form_row(formRecherche.nom) }}
@@ -63,15 +63,44 @@
         </div>
         <table class="table table-striped table-hover">
             <thead>
-                <th>Nom</th>
-                <th>Prénom</th>
+                <tr>
+                    <th rowspan="2">Nom</th>
+                    <th rowspan="2">Prénom</th>
+                    <th class="title" colspan="4">Appréciation des Parrains</th>
+                    <th rowspan="2">Appréciation du Top</th>
+                </tr>
+                <tr>
+                    <th>Appreciation</th>
+                    <th>Travail</th>
+                    <th>Humeur</th>
+                    <th>Date</th>
+                </tr>
             </thead>
             <tbody>
                 {% for filleul in filleuls %}
-                    <tr>
-                        <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
-                        <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
-                    </tr>    
+                        <tr>
+                            <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
+                            <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
+
+                            {% if filleul.parrainAppreciations | length > 0 %}
+
+                                {{filleul.parrainAppreciations|last|raw}}
+
+                            {% else %}
+                                <td colspan="4">
+                                    <p>Pas encore d'Appréciation</p>
+                                </td>
+                            {% endif %}
+
+                            <td>
+                                {% if filleul.topAppreciations | length > 0 %}
+                                    {{filleul.topAppreciations | last }}
+                                {% else %}
+                                    <p>Pas encore d'appreciation de Mi-Semestre</p>
+                                    
+                                {% endif %}
+                            </td>
+                        </tr>  
                 {% endfor %}
             </tbody>
         </table>
