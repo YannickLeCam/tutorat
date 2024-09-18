@@ -4,6 +4,41 @@
 
 {% block body %}
     <div id="wrapper">
+        <div class="rechercheListe" >
+            <div id="rechercheHeader">
+                <h2>Recherche</h2>
+                <div class="buttonPlus">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="buttonMoins hide">
+                    <i class="fa-solid fa-minus"></i>
+                </div>
+            </div>
+
+            {{ form_start(formRecherche, {'attr': {'class': 'form hide','id' : "formRecherche"}}) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.nom) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.prenom) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.parrain) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.faculte) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 buttonDivForm">
+                    {{ form_row(formRecherche.Rechercher) }}
+                </div>
+            </div>
+            {{ form_end(formRecherche) }}
+        </div>
         <table class="table table-striped table-hover">
             <thead>
                 <th>Nom</th>

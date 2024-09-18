@@ -4,10 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Filleul;
 use App\Form\NouvFilleulType;
-use App\Repository\DirectionRepository;
+use App\Repository\TopRepository;
 use App\Repository\FilleulRepository;
 use App\Repository\ParrainRepository;
-use App\Repository\TopRepository;
+use App\Form\RechercheFilleulFormType;
+use App\Repository\DirectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +18,58 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class FilleulController extends AbstractController
 {
     #[Route('/filleul', name: 'app_filleul')]
-    public function index(FilleulRepository $filleulRepository): Response
+    public function indexFilleul(Request $request, FilleulRepository $filleulRepository): Response
     {
-        $filleuls = $filleulRepository->findAll();
+        // Créer le formulaire de recherche
+        $formRecherche = $this->createForm(RechercheFilleulFormType::class, new Filleul());
+        $formRecherche->handleRequest($request);
+
+        $criteria = [];
+        if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
+            // Récupérer les données du formulaire
+            $data = $formRecherche->getData();
+
+            // Ajouter les critères en fonction des champs remplis
+            if ($data->getNom()) {
+                $criteria['nom'] = $data->getNom();
+            }
+
+            if ($data->getPrenom()) {
+                $criteria['prenom'] = $data->getPrenom();
+            }
+
+            if ($data->getMail()) {
+                $criteria['mail'] = $data->getMail();
+            }
+
+            if ($data->getTelephone()) {
+                $criteria['telephone'] = $data->getTelephone();
+            }
+
+            if ($data->getMineure()) {
+                $criteria['mineure'] = $data->getMineure();
+            }
+
+            if ($data->getSpecialite()) {
+                $criteria['specialite'] = $data->getSpecialite();
+            }
+
+            if ($data->getParrain()) {
+                $criteria['parrain'] = $data->getParrain();
+            }
+
+            if ($data->getFaculte()) {
+                $criteria['faculte'] = $data->getFaculte();
+            }
+        }
+
+        // Utiliser findBy avec les critères
+        $filleuls = $filleulRepository->searchFilleuls($criteria);
+
         return $this->render('filleul/index.html.twig', [
             'controller_name' => 'FilleulController',
-            'filleuls'=>$filleuls,
+            'filleuls' => $filleuls,
+            'formRecherche' => $formRecherche->createView(),
         ]);
     }
 
