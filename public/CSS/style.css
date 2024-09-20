@@ -256,13 +256,13 @@ FORM GLOBAL
 .form .row {
     margin-top: 3%;
 }
-.form .btn {
+.form button {
     width: 50%;
     background-color: var(--orange);
     border: none;
 }
 
-.form .btn:hover {
+.form button:hover {
     background-color: var(--orangeHover);
     transition: 0.3s;
 }

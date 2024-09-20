@@ -3,24 +3,18 @@
 {% block title %}Rapport Parrain{% endblock %}
 
 {% block body %}
-<div id="wrapper">
+<div id="wrapper" class="container mt-5">
     <h1>Rapport Parrain</h1>
 
-    {{ form_start(form) }}
-    
-    <div class="mb-3">
-        {{ form_label(form.appreciation, 'Appreciation', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.appreciation, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.appreciation) }}
-    </div>
+    {{ form_start(form,{'attr': {'class': 'form'} })}}
     
     <div class="mb-3">
         <label class="form-label">Humeur</label>
         <div class="d-flex justify-content-center">
             {% for radio in form.humeur %}
                 <div class="form-check form-check-inline">
-                    {{ form_widget(radio, { 'attr': {'class': 'btn-check','name' : 'option-base'} }) }}
-                    {{ form_label(radio, null, { 'label_attr': {'class': 'btn'} }) }}
+                    {{ form_widget(radio, { 'attr': {'class': 'btn-check', 'name': 'option-base'} }) }}
+                    {{ form_label(radio, null, { 'label_attr': {'class': 'btn btn-outline-primary mx-1'} }) }}
                 </div>
             {% endfor %}
         </div>
@@ -32,16 +26,24 @@
         <div class="d-flex justify-content-center">
             {% for radio in form.travail %}
                 <div class="form-check form-check-inline">
-                    {{ form_widget(radio, { 'attr': {'class': 'btn-check','name' : 'option-base'} }) }}
-                    {{ form_label(radio, null, { 'label_attr': {'class': 'btn'} }) }}
+                    {{ form_widget(radio, { 'attr': {'class': 'btn-check', 'name': 'option-base'} }) }}
+                    {{ form_label(radio, null, { 'label_attr': {'class': 'btn btn-outline-primary mx-1'} }) }}
                 </div>
             {% endfor %}
         </div>
         {{ form_errors(form.travail) }}
     </div>
-    
+
     <div class="mb-3">
-        {{ form_widget(form.Valider, {'attr': {'class': 'btn btn-primary'}}) }}
+        {{ form_label(form.appreciation, 'Appreciation', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.appreciation, {'attr': {'class': 'form-control', 'rows': 4}}) }}
+        {{ form_errors(form.appreciation) }}
+    </div>
+    
+    <div class="mb-3 justify-content-center">
+        <div class="d-flex justify-content-center">
+            {{ form_widget(form.Valider, {'attr': {'class': 'btn btn-primary'}}) }}
+        </div>
     </div>
     
     {{ form_end(form) }}
