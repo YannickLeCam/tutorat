@@ -273,6 +273,10 @@ FORM GLOBAL
     width: 100%;
     justify-content: center;
 }
+
+#rapport_parrain_humeur {
+    gap: 4%;
+}
 /* 
 ==========================================================
 HOME
