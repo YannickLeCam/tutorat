@@ -3,5 +3,24 @@
 {% block title %}Hello TopController!{% endblock %}
 
 {% block body %}
-    {{form(form)}}
+<div id="wrapper" class="container mt-5">
+    <h1>Rapport Top</h1>
+
+    {{ form_start(form,{'attr': {'class': 'form'} })}}
+    
+    <div class="mb-3">
+    <div class="mb-3">
+        {{ form_label(form.appreciation, 'Appreciation', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.appreciation, {'attr': {'class': 'form-control', 'rows': 4}}) }}
+        {{ form_errors(form.appreciation) }}
+    </div>
+    
+    <div class="mb-3 justify-content-center">
+        <div class="d-flex justify-content-center">
+            {{ form_widget(form.Valider, {'attr': {'class': 'btn btn-primary'}}) }}
+        </div>
+    </div>
+    
+    {{ form_end(form) }}
+</div>
 {% endblock %}
