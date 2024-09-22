@@ -3,9 +3,11 @@
 {% block title %}Direction{% endblock %}
 
 {% block body %}
-    <h1>Liste des membres de la direction</h1>
-    {{form(formRecherche)}}
-    {% for direction in directions %}
-        <li><a href="{{path('app_direction.show',{id:direction.id})}}">{{direction.prenom}} {{direction.nom}}</a></li>
-    {% endfor %}
+    <div id="wrapper">
+        <h1>Liste des membres de la direction</h1>
+        {{form(formRecherche)}}
+        {% for direction in directions %}
+            <li><a href="{{path('app_direction.show',{id:direction.id})}}">{{direction.prenom}} {{direction.nom}}</a></li>
+        {% endfor %}
+    </div>
 {% endblock %}
