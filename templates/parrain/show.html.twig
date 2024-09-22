@@ -3,48 +3,62 @@
 {% block title %}Hello ParrainController!{% endblock %}
 
 {% block body %}
-    <h1>{{parrain.nom}} {{parrain.prenom}}</h1>
+    <div id="wrapper">
+        <h1>{{parrain.nom}} {{parrain.prenom}}</h1>
 
-    {% if parrain.filleuls | length > 0 %}
-    <table>
-        <thead>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Dernière Appréciation</th>
-            <th>Ajouter une Appréciation</th>
-        </thead>
-        <tbody>
-            {% for filleul in parrain.filleuls %}
-            <tr>
-                <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
-                <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
-                <td>
-                    {% if filleul.parrainAppreciations | length > 0 %}
-                    <table>
-                        <thead>
-                            <th>Appréciation</th>
-                            <th>Humeur</th>
-                            <th>Travail</th>
-                            <th>Date</th>
-                        </thead>
-                        <tbody>
-                            {{filleul.parrainAppreciations|last|raw}}
-                        </tbody>
-                    </table>
-                    {% else %}
-                        <p>Pas encore d'Appréciation</p>
+        <p>le superviseur est <a href="{{path('app_top.show',{id:parrain.top.id})}}">{{parrain.top.nom}} {{parrain.top.prenom}}</a></p>
+
+        {% if parrain.filleuls | length > 0 %}
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th rowspan="2">Nom</th>
+                    <th rowspan="2">Prénom</th>
+                    <th class="title" colspan="4">Appréciation des Parrains</th>
+                    {% if is_granted('ROLE_TOP') or is_granted('ROLE_DIRECTION') %}
+                        <th rowspan="2">Appréciation du Top</th>
                     {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        
-        {% if is_granted('ROLE_DIRECTION') %}
-            <p>Ajouter des filleul a ce parrain ici [INCOMING]</p>
+                </tr>
+                <tr>
+                    <th>Appreciation</th>
+                    <th>Travail</th>
+                    <th>Humeur</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for filleul in parrain.filleuls %}
+                <tr>
+                    <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
+                    <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
+
+                    {% if filleul.parrainAppreciations | length > 0 %}
+                        {{filleul.parrainAppreciations|last|raw}}
+                    {% else %}
+                        <td colspan="4">Pas encore d'Appréciation</p>
+                    {% endif %}
+                    
+                    <td>
+                        {% if is_granted('ROLE_TOP') or is_granted('ROLE_DIRECTION') %}
+                            {% if filleul.topAppreciations | length > 0 %}
+                                {{filleul.topAppreciations | last }}
+                            {% else %}
+                                <p>Pas encore d'appreciation de Mi-Semestre</p>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% else %}
             <p>Le parrain n'a pas encore de filleul relier</p>
         {% endif %}
-    {% endif %}
+        {% if is_granted('ROLE_DIRECTION') %}
+            <a href="">AUJOUTER UN FILLEUL</a>
+        {% endif %}
+    </div>
+
 {% endblock %}
