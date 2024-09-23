@@ -35,8 +35,24 @@
             </div>
             {{ form_end(formRecherche) }}
         </div>
-        {% for direction in directions %}
-            <li><a href="{{path('app_direction.show',{id:direction.id})}}">{{direction.prenom}} {{direction.nom}}</a></li>
-        {% endfor %}
+        {% if directions | length > 0 %}
+            <table class="table">
+                <thead>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                </thead>
+                <tbody>
+                    {% for direction in directions %}
+                        <tr>
+                            <td><a href="{{path('app_direction.show',{id:direction.id})}}">{{direction.nom}}</a></td>
+                            <td><a href="{{path('app_direction.show',{id:direction.id})}}">{{direction.prenom}}</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        {% else %}
+            <p>Il ne semble ne pas avoir de Tops dans les critères</p>
+        {% endif %}
     </div>
 {% endblock %}

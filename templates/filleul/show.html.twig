@@ -4,7 +4,7 @@
 
 {% block body %}
     <div id="wrapper">
-        <h1>Profile de {{filleul.nom}} {{filleul.prenom}}</h1>
+        <h1>{{filleul.nom}} {{filleul.prenom}}</h1>
 
         <p>Mon referent est : <a href="{{path('app_parrain.show',{id:filleul.parrain.id})}}">{{filleul.parrain}}</a> </p>
         <table class="table table-striped table-hover">

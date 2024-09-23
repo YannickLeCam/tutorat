@@ -167,6 +167,16 @@ nav a:hover{
 LIST
 ==========================================================
 */
+#ajout{
+    color: #53d44a;
+    font-size: x-large;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+#ajout:hover{
+    color: rgb(47, 192, 47);
+}
 
 .rechercheListe{
     border: 3px var(--bleu) solid;
