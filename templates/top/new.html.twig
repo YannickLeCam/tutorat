@@ -3,5 +3,30 @@
 {% block title %}Hello TopController!{% endblock %}
 
 {% block body %}
-    {{form(form)}}
+<div id="wrapper">
+    <h1>Nouveau top</h1>
+
+    {{ form_start(form, {'attr': {'class': 'form'}}) }}
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.nom) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.prenom) }}
+        </div>
+    </div>
+    <div class="row">
+        {{ form_row(form.faculte) }}
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 buttonDivForm">
+            {{ form_row(form.Valider) }}
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+
+</div>
 {% endblock %}  
