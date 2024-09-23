@@ -2,19 +2,21 @@
 namespace App\Form;
 
 use App\Entity\Top;
+use App\Entity\User;
 use App\Entity\Parrain;
 use App\Repository\TopRepository;
 use App\Repository\ParrainRepository;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use App\Repository\DirectionRepository;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Entity\User;
-use App\Repository\DirectionRepository;
-use Symfony\Component\Validator\Constraints\Choice;
 
 class NouvAccountType extends AbstractType
 {
@@ -32,10 +34,15 @@ class NouvAccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('password')
-            ->add('isVerified')
-            ->add('Valider', SubmitType::class);
+            ->add('email', EmailType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('password', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('Valider', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-primary']
+            ]);
     
         // Ajouter le champ idRole dynamiquement en fonction du rôle sélectionné
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
@@ -47,14 +54,17 @@ class NouvAccountType extends AbstractType
             if ($role === 'ROLE_PARRAIN') {
                 $form->add('idRole', ChoiceType::class, [
                     'choices' => $this->getParrains(),
+                    'attr' => ['class' => 'form-select'],
                 ]);
             } elseif ($role === 'ROLE_TOP') {
                 $form->add('idRole', ChoiceType::class, [
                     'choices' => $this->getTops(),
+                    'attr' => ['class' => 'form-select'],
                 ]);
             }elseif($role === 'ROLE_DIRECTION'){
                 $form->add('idRole' , ChoiceType::class , [
                     'choices'=>$this->getDirections(),
+                    'attr' => ['class' => 'form-select'],
                 ]);
             }
             // Pas besoin d'ajouter idRole si le rôle est Admin

@@ -164,6 +164,40 @@ nav a:hover{
 
 /* 
 ==========================================================
+NAV BAR CREATION COMPTE
+==========================================================
+*/
+
+#navManualRegister ul{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#navManualRegister li{
+    position: relative;
+}
+
+#navManualRegister li::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--orange);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+
+#navManualRegister li:hover::after{
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* 
+==========================================================
 LIST
 ==========================================================
 */

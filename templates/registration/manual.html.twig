@@ -4,20 +4,35 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-<nav>
-    <ul>
-        <li><a href="{{path('app_registerManual',{role:'parrain'})}}">Parrain</a></li>
-        <li><a href="{{path('app_registerManual',{role:'top'})}}">Top</a></li>
-        <li><a href="{{path('app_registerManual',{role:'direction'})}}">Direction</a></li>
-    </ul>
-</nav>
-<h1>Ajouter un nouveau {{role}}</h1>
-{{ form_start(form) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.idRole) }}
-    {{ form_row(form.password) }}
-    {{ form_row(form.isVerified) }}
-    {{ form_row(form.Valider) }}
-{{ form_end(form) }}
+<div id="wrapper">
+    <nav id="navManualRegister">
+        <ul>
+            <li><a href="{{path('app_registerManual',{role:'parrain'})}}">Parrain</a></li>
+            <li><a href="{{path('app_registerManual',{role:'top'})}}">Top</a></li>
+            <li><a href="{{path('app_registerManual',{role:'direction'})}}">Direction</a></li>
+        </ul>
+    </nav>
+    <h1>Ajouter un nouveau {{role}}</h1>
+    {{ form_start(form, {'attr': {'class': 'form'}}) }}
+        <div class="row">
+            {{ form_row(form.email) }}
+        </div>
+        
+        <div class="row">
+            {{ form_row(form.idRole) }}
+        </div>
+        
+        <div class="row">
+            {{ form_row(form.password) }}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12 buttonDivForm">
+                {{ form_row(form.Valider) }}
+            </div>
+        </div>
+    {{ form_end(form) }}
+</div>
+
 
 {% endblock %}
