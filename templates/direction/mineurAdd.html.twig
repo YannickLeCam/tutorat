@@ -3,5 +3,24 @@
 {% block title %}Hello MineureController!{% endblock %}
 
 {% block body %}
-    {{form(form)}}
+    <div id="wrapper">
+        <h1>Nouvelle spécialité</h1>
+
+        {{ form_start(form, {'attr': {'class': 'form'}}) }}
+
+        <div class="row">
+
+            {{ form_row(form.name) }}
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 buttonDivForm">
+                {{ form_row(form.Valider) }}
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+
+    </div>
 {% endblock %}
