@@ -5,7 +5,36 @@
 {% block body %}
     <div id="wrapper">
         <h1>Liste des membres de la direction</h1>
-        {{form(formRecherche)}}
+        <div class="rechercheListe" >
+            <div id="rechercheHeader">
+                <h2>Recherche</h2>
+                <div class="buttonPlus">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="buttonMoins hide">
+                    <i class="fa-solid fa-minus"></i>
+                </div>
+            </div>
+
+            {{ form_start(formRecherche, {'attr': {'class': 'form hide','id' : "formRecherche"}}) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.nom) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.prenom) }}
+                </div>
+            </div>
+            <div class="row">
+                {{ form_row(formRecherche.faculte) }}
+            </div>
+            <div class="row">
+                <div class="col-md-12 buttonDivForm">
+                    {{ form_row(formRecherche.Rechercher) }}
+                </div>
+            </div>
+            {{ form_end(formRecherche) }}
+        </div>
         {% for direction in directions %}
             <li><a href="{{path('app_direction.show',{id:direction.id})}}">{{direction.prenom}} {{direction.nom}}</a></li>
         {% endfor %}

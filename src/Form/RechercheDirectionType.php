@@ -17,16 +17,21 @@ class RechercheDirectionType extends AbstractType
         $builder
             ->add('nom', null, [
                 'required' => false, // Le champ 'nom' est facultatif
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('prenom', null, [
                 'required' => false, // Le champ 'prenom' est facultatif
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('faculte', EntityType::class, [
                 'class' => Faculte::class,
-                'choice_label' => 'name', // Utiliser le nom de la faculté comme label
+                'choice_label' => 'name',
                 'required' => false, // Le champ 'faculte' est facultatif
+                'attr' => ['class' => 'form-select']
             ])
-            ->add('Rechercher', SubmitType::class);
+            ->add('Rechercher',SubmitType::class, [
+                'attr' => ['class' => 'btn btn-primary']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
