@@ -3,28 +3,60 @@
 {% block title %}Liste des tops{% endblock %}
 
 {% block body %}
-    <h1>Liste des Tops</h1>
+    <div id="wrapper">
+        <h1>Liste des Tops</h1>
 
-    {{form(formRecherche)}}
+        <div class="rechercheListe" >
+            <div id="rechercheHeader">
+                <h2>Recherche</h2>
+                <div class="buttonPlus">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="buttonMoins hide">
+                    <i class="fa-solid fa-minus"></i>
+                </div>
+            </div>
 
-    {% if tops | length > 0 %}
-        <table class="table">
-            <thead>
-                <th>Nom</th>
-                <th>Prénom</th>
-            </thead>
-            <tbody>
-                {% for top in tops %}
-                    <tr>
-                        <td><a href="{{path('app_top.show',{id:top.id})}}">{{top.nom}}</a></td>
-                        <td><a href="{{path('app_top.show',{id:top.id})}}">{{top.prenom}}</a></td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
-    {% else %}
-        <p>Il ne pas avoir de Tops dans les critères</p>
-    {% endif %}
+            {{ form_start(formRecherche, {'attr': {'class': 'form hide','id' : "formRecherche"}}) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.nom) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(formRecherche.prenom) }}
+                </div>
+            </div>
+            <div class="row">
+                {{ form_row(formRecherche.faculte) }}
+            </div>
+            <div class="row">
+                <div class="col-md-12 buttonDivForm">
+                    {{ form_row(formRecherche.Rechercher) }}
+                </div>
+            </div>
+            {{ form_end(formRecherche) }}
+        </div>
+    
+        {% if tops | length > 0 %}
+            <table class="table">
+                <thead>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                </thead>
+                <tbody>
+                    {% for top in tops %}
+                        <tr>
+                            <td><a href="{{path('app_top.show',{id:top.id})}}">{{top.nom}}</a></td>
+                            <td><a href="{{path('app_top.show',{id:top.id})}}">{{top.prenom}}</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        {% else %}
+            <p>Il ne semble ne pas avoir de Tops dans les critères</p>
+        {% endif %}
+    </div>
+
 
 {% endblock %}
