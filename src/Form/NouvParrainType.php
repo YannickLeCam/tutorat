@@ -4,11 +4,14 @@ namespace App\Form;
 
 use App\Entity\Top;
 use App\Entity\Faculte;
+use App\Entity\Mineure;
 use App\Entity\Parrain;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class NouvParrainType extends AbstractType
@@ -16,18 +19,28 @@ class NouvParrainType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
-            ->add('prenom')
+            ->add('nom', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('prenom', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('faculte', EntityType::class, [
+                'class' => Faculte::class,
+                'choice_label' => 'name',
+                'attr' => ['class' => 'form-select']
+            ])
             ->add('top', EntityType::class, [
                 'class' => Top::class,
                 'choice_label' => 'nom',
+                'attr' => ['class' => 'form-select']
             ])
-            ->add('faculte',EntityType::class,[
-                'class'=> Faculte::class,
-                'choice_label' => 'name',
-            ])
-            ->add('Valider',SubmitType::class)
-        ;
+            ->add('Valider', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-primary']
+            ]);
+
+        // Add form class
+        $builder->setAttribute('attr', ['class' => 'custom-form-class']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
