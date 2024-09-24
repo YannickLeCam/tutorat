@@ -1,19 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Réassigner les filleuls de {{ mineure.name }}</h1>
+    <div id="wrapper">
+        <h1>Réassigner les filleuls de {{ mineure.name }}</h1>
 
-    <form method="post">
-        {% for id, formView in forms %}
-            <div>
-                {{ form_start(formView) }}
-                {{ form_widget(formView) }}
-                {{ form_end(formView) }}
-            </div>
-        {% endfor %}
+        <form method="post">
+            {% for id, formView in forms %}
+                <div>
+                    {{ form_start(formView) }}
+                    {{ form_widget(formView) }}
+                    {{ form_end(formView) }}
+                </div>
+            {% endfor %}
+    
+            <button type="submit">Réassigner</button>
+        </form>
+    
+        <a href="{{ path('app_mineur') }}">Annuler</a>
+    </div>
 
-        <button type="submit">Réassigner</button>
-    </form>
-
-    <a href="{{ path('app_mineur') }}">Annuler</a>
 {% endblock %}
