@@ -6,19 +6,21 @@ use DateTime;
 use App\Entity\Parrain;
 use App\Form\NouvParrainType;
 use App\Form\RapportParrainType;
-use App\Entity\ParrainAppreciation;
 use App\Form\RechercheParrainType;
+use App\Entity\ParrainAppreciation;
 use App\Repository\FilleulRepository;
 use App\Repository\ParrainRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ParrainController extends AbstractController
 {
     #[Route('/parrain/show-{id}',name:'app_parrain.show')]
+    #[IsGranted(['ROLE_DIRECTION', 'ROLE_TOP'], message: "Vous n'avez pas accès a cette section.")]
     public function show(Parrain $parrain):Response
     {
         return $this->render('parrain/show.html.twig', [
@@ -28,7 +30,9 @@ class ParrainController extends AbstractController
     }
 
     #[Route('/parrain/new', name: 'app_parrain.new')]
+    #[IsGranted(['ROLE_DIRECTION'], message: "Vous n'avez pas accès a cette section.")]
     #[Route('/parrain/edit-{id}', name: 'app_parrain.edit')]
+    #[IsGranted(['ROLE_DIRECTION'], message: "Vous n'avez pas accès a cette section.")]
     public function new(Parrain $parrain = null, Request $request, EntityManagerInterface $em): Response
     {
         // Faire une vérification que l'utilisateur est bien un Admin ou un membre de la direction
@@ -59,14 +63,28 @@ class ParrainController extends AbstractController
     #[Route('/appreciation/edit-{id}', name: 'appreciation.edit',requirements : ['id'=>'\d+'])]
     public function newAppreciation(ParrainAppreciation $appreciation = null,int $idParrain,int $idFilleul,Request $request,EntityManagerInterface $em,ParrainRepository $parrainRepository,FilleulRepository $filleulRepository): Response
     {
-        if (!$appreciation) {
+         // Vérifier si l'utilisateur est connecté
+         if (!$this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($appreciation === null) {
+            // Vérifier que les entités avec les IDs fournis existent bien
+            $parrain = $parrainRepository->find($idParrain);
+            $filleul = $filleulRepository->find($idFilleul);
+
+            if (!$parrain || !$filleul) {
+                throw $this->createNotFoundException('Parrain ou Filleul non trouvé.');
+            }
+            // Vérifier que l'utilisateur connecté est bien le parrain associé au filleul
+            if ($filleul->getParrain()->getId() !== $idParrain) {
+                throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à mettre une appréciation.');
+            }
             $appreciation = new ParrainAppreciation();
-            $parrain = $parrainRepository->findOneBy(['id'=>$idParrain]);
             $appreciation->setParrain($parrain);
-            $filleul = $filleulRepository->findOneBy(['id'=>$idFilleul]);
             $appreciation->setFilleul($filleul);
             $appreciation->setDateCreation(new DateTime());
         }
+
         $form = $this->createForm(RapportParrainType::class , $appreciation);
         $form->handleRequest($request);
         
