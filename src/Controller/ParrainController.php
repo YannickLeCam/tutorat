@@ -103,6 +103,7 @@ class ParrainController extends AbstractController
     }
 
     #[Route('/parrain', name: 'app_parrain')]
+    #[IsGranted(['ROLE_DIRECTION'], message: "Vous n'avez pas accès a cette section.")]
     public function index(Request $request, ParrainRepository $parrainRepository): Response
     {
         // Créer le formulaire de recherche
