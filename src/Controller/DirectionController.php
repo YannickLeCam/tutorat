@@ -123,7 +123,7 @@ class DirectionController extends AbstractController
 
 // ... le reste du code
 
-#[Route('/mineure/delete/{id}', name: 'app_mineur.del', methods: ['GET', 'POST'])]
+#[Route('/direction/mineure/delete/{id}', name: 'app_mineur.del', methods: ['GET', 'POST'])]
 public function deleteMineur(
     Request $request,
     Mineure $mineure,
@@ -188,7 +188,7 @@ public function deleteMineur(
 }
 
 
-    #[Route('/mineure/reassign', name: 'app_mineur.reassign', methods: ['POST'])]
+    #[Route('/direction/mineure/reassign', name: 'app_mineur.reassign', methods: ['POST'])]
     public function reassignFilleuls(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Récupérer toutes les données envoyées
@@ -258,6 +258,7 @@ public function deleteMineur(
     #[Route('/direction/specialite', name: 'app_specialite')]
     public function listSpecialite(SpecialiteRepository $specialiteRepository): Response
     {
+
         $specialites = $specialiteRepository->findAll();
         return $this->render('direction/specialiteList.html.twig', [
             'controller_name' => 'OtherController',
