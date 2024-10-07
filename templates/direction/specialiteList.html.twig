@@ -13,7 +13,7 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    {% for specialite in specialites %}
+                    {% for specialite in specialites|sort((a, b) => a.nom <=> b.nom) %}
                         <td>{{specialite.name}}</td>
                         <td> <a href="{{path('app_specialite.edit',{id:specialite.id})}}"> <i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a> <a href="{{path('app_specialite.del',{id:specialite.id})}}"><i class="fa-solid fa-trash-can" style="color: #ee5044;"></i></a></td>
                     {% endfor %}

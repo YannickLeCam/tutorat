@@ -48,7 +48,7 @@
                     <th>Prénom</th>
                 </thead>
                 <tbody>
-                    {% for parrain in parrains %}
+                    {% for parrain in parrains|sort((a, b) => a.nom <=> b.nom) %}
                         <tr>
                             <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.nom}}</a></td>
                             <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.prenom}}</a></td>

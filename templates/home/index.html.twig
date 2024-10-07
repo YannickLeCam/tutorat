@@ -30,7 +30,7 @@
 
                 </thead>
                 <tbody>
-                    {% for filleul in user.filleuls %}
+                    {% for filleul in user.filleuls|sort((a, b) => a.nom <=> b.nom) %}
                     <tr>
                         <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
                         <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>

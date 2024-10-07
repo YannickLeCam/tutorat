@@ -42,7 +42,7 @@
                     <th>Prénom</th>
                 </thead>
                 <tbody>
-                    {% for direction in directions %}
+                    {% for direction in directions|sort((a, b) => a.nom <=> b.nom) %}
                         <tr>
                             <td><a href="{{path('app_direction.show',{id:direction.id})}}">{{direction.nom}}</a></td>
                             <td><a href="{{path('app_direction.show',{id:direction.id})}}">{{direction.prenom}}</a></td>

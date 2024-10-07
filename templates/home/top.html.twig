@@ -24,7 +24,7 @@
                         <th>Prénom</th>
                     </thead>
                     <tbody>
-                        {% for parrain in user.parrains %}
+                        {% for parrain in user.parrains|sort((a, b) => a.nom <=> b.nom) %}
                             <tr>
                                 <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.nom}}</a></td>
                                 <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.prenom}}</a></td>
@@ -65,7 +65,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for filleul in filleuls %}
+                        {% for filleul in filleuls|sort((a, b) => a.nom <=> b.nom) %}
                         <tr>
                             <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
                             <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>

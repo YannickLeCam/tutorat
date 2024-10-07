@@ -44,7 +44,7 @@
                     <th>Prénom</th>
                 </thead>
                 <tbody>
-                    {% for top in tops %}
+                    {% for top in tops|sort((a, b) => a.nom <=> b.nom) %}
                         <tr>
                             <td><a href="{{path('app_top.show',{id:top.id})}}">{{top.nom}}</a></td>
                             <td><a href="{{path('app_top.show',{id:top.id})}}">{{top.prenom}}</a></td>
