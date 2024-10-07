@@ -21,12 +21,6 @@ class Filleul
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $mail = null;
-
-    #[ORM\Column(length: 15)]
-    private ?string $telephone = null;
-
     #[ORM\ManyToOne(inversedBy: 'filleuls')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Mineure $mineure = null;
@@ -85,30 +79,6 @@ class Filleul
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getMail(): ?string
-    {
-        return $this->mail;
-    }
-
-    public function setMail(string $mail): static
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
-    public function getTelephone(): ?string
-    {
-        return $this->telephone;
-    }
-
-    public function setTelephone(string $telephone): static
-    {
-        $this->telephone = $telephone;
 
         return $this;
     }

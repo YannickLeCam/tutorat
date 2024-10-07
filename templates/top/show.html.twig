@@ -3,46 +3,52 @@
 {% block title %}Hello TopController!{% endblock %}
 
 {% block body %}
-    <h1>{{top.prenom}} {{top.nom}}</h1>
+    <div id="wrapper">
+        <h1><span id="presentation">{{top.prenom}} {{top.nom}}</span></h1>
 
-    {% if top.parrains | length > 0 %}
-        <h2>Liste des parrains a charge</h2>
-        <table class="table">
-            <thead>
-                <th>Prénom</th>
-                <th>Nom</th>
-            </thead>
-            <tbody>
-                {% for parrain in top.parrains %}
-                    <tr>
-                        <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.prenom}}</a></td>
-                        <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.nom}}</a></td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Pas de parrain a charge</p>
-    {% endif %}
+        {% if top.parrains | length > 0 %}
+            <h2>Liste des parrains a charge</h2>
+            <table class="table">
+                <thead>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    
+                </thead>
+                <tbody>
+                    {% for parrain in top.parrains|sort((a, b) => a.nom <=> b.nom) %}
+                        <tr>
+                            <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.nom}}</a></td>
+                            <td><a href="{{path('app_parrain.show',{id:parrain.id})}}">{{parrain.prenom}}</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Pas de parrain a charge</p>
+        {% endif %}
 
-    {% if filleuls | length > 0 %}
         <h2>Liste des étudiants a charge</h2>
-        <table class="table">
-            <thead>
-                <th>Prénom</th>
-                <th>Nom</th>
-            </thead>
-            <tbody>
-                {% for filleul in filleuls %}
-                    <tr>
-                        <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
-                        <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Pas de filleul a charge</p>
-    {% endif %}
+        {% if filleuls | length > 0 %}
+            
+            <table class="table">
+                <thead>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+    
+                </thead>
+                <tbody>
+                    {% for filleul in filleuls|sort((a, b) => a.nom <=> b.nom) %}
+                        <tr>
+                            <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.prenom}}</a></td>
+                            <td><a href="{{path('app_filleul.show',{id:filleul.id})}}">{{filleul.nom}}</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Pas de filleul a charge</p>
+        {% endif %}
+    </div>
+    
     
 {% endblock %}  

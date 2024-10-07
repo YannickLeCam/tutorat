@@ -37,9 +37,6 @@ class NouvAccountType extends AbstractType
             ->add('email', EmailType::class, [
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('password', TextType::class, [
-                'attr' => ['class' => 'form-control']
-            ])
             ->add('Valider', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-primary']
             ]);

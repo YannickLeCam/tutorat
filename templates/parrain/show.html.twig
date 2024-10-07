@@ -4,7 +4,7 @@
 
 {% block body %}
     <div id="wrapper">
-        <h1>{{parrain.nom}} {{parrain.prenom}}</h1>
+        <h1><span id="presentation">{{parrain.nom}} {{parrain.prenom}}</span></h1>
 
         <p>le superviseur est <a href="{{path('app_top.show',{id:parrain.top.id})}}">{{parrain.top.nom}} {{parrain.top.prenom}}</a></p>
 

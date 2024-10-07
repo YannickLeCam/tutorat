@@ -26,14 +26,6 @@ class RechercheFilleulFormType extends AbstractType
                 'required' => false, // Le champ 'prenom' est facultatif
                 'attr' => ['class' => 'form-control'],
             ])
-            ->add('mail', null, [
-                'required' => false, // Le champ 'mail' est facultatif
-                'attr' => ['class' => 'form-control'],
-            ])
-            ->add('telephone', null, [
-                'required' => false, // Le champ 'telephone' est facultatif
-                'attr' => ['class' => 'form-control'],
-            ])
             ->add('mineure', EntityType::class, [
                 'class' => Mineure::class,
                 'choice_label' => 'name',

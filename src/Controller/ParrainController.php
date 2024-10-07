@@ -20,7 +20,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ParrainController extends AbstractController
 {
     #[Route('/parrain/show-{id}',name:'app_parrain.show')]
-    #[IsGranted(['ROLE_DIRECTION', 'ROLE_TOP'], message: "Vous n'avez pas accès a cette section.")]
     public function show(Parrain $parrain):Response
     {
         return $this->render('parrain/show.html.twig', [
@@ -30,9 +29,7 @@ class ParrainController extends AbstractController
     }
 
     #[Route('/parrain/new', name: 'app_parrain.new')]
-    #[IsGranted(['ROLE_DIRECTION'], message: "Vous n'avez pas accès a cette section.")]
     #[Route('/parrain/edit-{id}', name: 'app_parrain.edit')]
-    #[IsGranted(['ROLE_DIRECTION'], message: "Vous n'avez pas accès a cette section.")]
     public function new(Parrain $parrain = null, Request $request, EntityManagerInterface $em): Response
     {
         // Faire une vérification que l'utilisateur est bien un Admin ou un membre de la direction
@@ -103,7 +100,6 @@ class ParrainController extends AbstractController
     }
 
     #[Route('/parrain', name: 'app_parrain')]
-    #[IsGranted(['ROLE_DIRECTION'], message: "Vous n'avez pas accès a cette section.")]
     public function index(Request $request, ParrainRepository $parrainRepository): Response
     {
         // Créer le formulaire de recherche

@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\NouvAccountType;
 use App\Form\RegistrationFormType;
+use App\Repository\DirectionRepository;
+use App\Repository\ParrainRepository;
+use App\Repository\TopRepository;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -82,36 +85,59 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/registerManual-{role}', name: 'app_registerManual')]
-    public function registerManual(String $role,Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function registerManual(String $role, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager , ParrainRepository $parrainRepository , TopRepository $topRepository , DirectionRepository $directionRepository): Response
     {
         $user = new User();
+        
         if ($role === 'parrain') {
             $roleSet = ['ROLE_PARRAIN'];
-        }elseif ($role === 'top') {
+        } elseif ($role === 'top') {
             $roleSet = ['ROLE_TOP'];
-        }elseif ($role === 'direction') {
+        } elseif ($role === 'direction') {
             $roleSet = ['ROLE_DIRECTION'];
-        }else {
-            //Faire un message d'erreur
+        } else {
+            // Faire un message d'erreur
             $roleSet = ['ROLE_PARRAIN'];
         }
+        
         $user->setRoles($roleSet);
         $form = $this->createForm(NouvAccountType::class, $user);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            if ($role === 'parrain') {
+                $utilisateur = $parrainRepository->findOneBy(['id'=>$form->get('idRole')->getData()]);
+            } elseif ($role === 'top') {
+                $utilisateur = $topRepository->findOneBy(['id'=>$form->get('idRole')->getData()]);
+            } elseif ($role === 'direction') {
+                $utilisateur = $directionRepository->findOneBy(['id'=>$form->get('idRole')->getData()]);
+            } else {
+                // Faire un message d'erreur
+                $utilisateur = $parrainRepository->findOneBy(['id'=>$form->get('idRole')->getData()]);
+
+            }
+
+            // Récupérer le prénom et le nom de l'utilisateur
+            $firstName = $utilisateur->getPrenom();
+            $lastName = $utilisateur->getNom();
+    
+            // Générer le mot de passe
+            $generatedPassword = strtolower(substr($firstName, 0, 1) . $lastName); // Première lettre du prénom + nom, en minuscules
+    
+            // Définit le mot de passe généré
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('password')->getData()
+                    $generatedPassword
                 )
             );
-            $user->setIdRole($form->get('idRole')->getData());
+            
+            // Assurez-vous que l'idRole est défini
+            $user->setIdRole($utilisateur->getId());
             $entityManager->persist($user);
             $entityManager->flush();
-
-            // // generate a signed url and email it to the user
+    
+            // // générer une URL signée et l'envoyer par e-mail à l'utilisateur
             // $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
             //     (new TemplatedEmail())
             //         ->from(new Address('tutorat@lyon.com', 'Duriff'))
@@ -119,12 +145,12 @@ class RegistrationController extends AbstractController
             //         ->subject('Please Confirm your Email')
             //         ->htmlTemplate('registration/confirmation_email.html.twig')
             // );
-
-            // do anything else you need here, like send an email
-
-            return $this->redirectToRoute('app_registerManual',['role'=>$role]);
+    
+            // Faites tout ce dont vous avez besoin ici, comme envoyer un e-mail
+    
+            return $this->redirectToRoute('app_registerManual', ['role' => $role]);
         }
-
+    
         return $this->render('registration/manual.html.twig', [
             'form' => $form,
             'role' => $role,

@@ -26,12 +26,6 @@ class NouvFilleulType extends AbstractType
             ->add('prenom', TextType::class, [
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('mail', EmailType::class, [
-                'attr' => ['class' => 'form-control']
-            ])
-            ->add('telephone', TextType::class, [
-                'attr' => ['class' => 'form-control']
-            ])
             ->add('mineure', EntityType::class, [
                 'class' => Mineure::class,
                 'choice_label' => 'name',
