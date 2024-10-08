@@ -4,20 +4,21 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\NouvAccountType;
-use App\Form\RegistrationFormType;
-use App\Repository\DirectionRepository;
-use App\Repository\ParrainRepository;
-use App\Repository\TopRepository;
 use App\Security\EmailVerifier;
+use App\Form\PasswordChangeType;
+use App\Repository\TopRepository;
+use App\Form\RegistrationFormType;
+use Symfony\Component\Mime\Address;
+use App\Repository\ParrainRepository;
+use App\Repository\DirectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
@@ -61,6 +62,50 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
+        ]);
+    }
+
+    #[Route('/change-password', name: 'app_change_password')]
+    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(PasswordChangeType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $oldPassword = $form->get('oldPassword')->getData();
+            $newPassword = $form->get('newPassword')->getData();
+            $confirmPassword = $form->get('confirmPassword')->getData();
+
+            // Vérifiez si l'ancien mot de passe est correct
+            if (!$passwordHasher->isPasswordValid($user, $oldPassword)) {
+                $this->addFlash('error', 'L\'ancien mot de passe est incorrect');
+                return $this->redirectToRoute('app_change_password');
+            }
+
+            // Vérifiez si le nouveau mot de passe et la confirmation correspondent
+            if ($newPassword !== $confirmPassword) {
+                $this->addFlash('error', 'Les nouveaux mots de passe ne correspondent pas');
+                return $this->redirectToRoute('app_change_password');
+            }
+
+            // Encodez et mettez à jour le nouveau mot de passe
+            $user->setPassword(
+                $passwordHasher->hashPassword(
+                    $user,
+                    $newPassword
+                )
+            );
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre mot de passe a été changé avec succès');
+
+            return $this->redirectToRoute('app_home'); // Redirigez vers la page de profil ou une autre page
+        }
+
+        return $this->render('registration/changePassword.html.twig', [
+            'form' => $form->createView(),
+            'controller_name' => "profile",
         ]);
     }
 
