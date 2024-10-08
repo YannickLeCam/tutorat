@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset{% endblock %}
+
+{% block body %}
+
+    <div id="wrapper">
+        <h1>Reset de mot de passe</h1>
+
+        <p>Pour le compte de  <span id="presentation">{{user.email}}</span></p>
+        <p>le nouveau de mot de passe est : <span id="presentation">{{password}}</span></p>
+    </div>
+
+{% endblock %}

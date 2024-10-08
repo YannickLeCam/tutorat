@@ -11,6 +11,7 @@ use App\Form\RegistrationFormType;
 use Symfony\Component\Mime\Address;
 use App\Repository\ParrainRepository;
 use App\Repository\DirectionRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -106,6 +107,65 @@ class RegistrationController extends AbstractController
         return $this->render('registration/changePassword.html.twig', [
             'form' => $form->createView(),
             'controller_name' => "profile",
+        ]);
+    }
+
+    #[Route(path: '/resetmdp-{id_role}-{role}', name: 'app_resetmdp')]
+    public function resetMDP(int $id_role, string $role ,UserPasswordHasherInterface $passwordHasher,UserRepository $userRepository , EntityManagerInterface $entityManager): Response
+    {
+        if ($role=='parrain') {
+            $role = 'ROLE_PARRAIN';
+        }elseif ($role=='top') {
+            $role = 'ROLE_TOP';
+        }elseif ($role == 'direction') {
+            $role = 'ROLE_DIRECTION';
+        }else {
+            //ERROR
+        }
+        
+        $users = $userRepository->createQueryBuilder('u')
+        ->where('u.idRole = :idRole')
+        ->andWhere('u.roles LIKE :role')
+        ->setParameter('idRole', $id_role)
+        ->setParameter('role', '%"'.$role.'"%')
+        ->getQuery()
+        ->getResult();
+
+        $user = $users[0];
+        // Define the character sets
+        $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        $digits = '0123456789';
+        $specialChars = '@!&$*%';
+
+        // Ensure at least one character from each set is included
+        $password = $uppercase[random_int(0, strlen($uppercase) - 1)] .
+                    $lowercase[random_int(0, strlen($lowercase) - 1)] .
+                    $digits[random_int(0, strlen($digits) - 1)] .
+                    $specialChars[random_int(0, strlen($specialChars) - 1)];
+
+        // Fill the rest of the password length with random characters from all sets
+        $allChars = $uppercase . $lowercase . $digits . $specialChars;
+        for ($i = 4; $i < 8; $i++) {
+            $password .= $allChars[random_int(0, strlen($allChars) - 1)];
+        }
+
+        // Shuffle the password to ensure randomness
+        $password = str_shuffle($password);
+        $user->setPassword(
+            $passwordHasher->hashPassword(
+                $user,
+                $password
+            )
+        );
+        $entityManager->flush();
+        
+
+        return $this->render('security/reset.html.twig', [
+            'controller_name' => 'SecurityController',
+            'password' => $password,
+            'user' => $user,
+
         ]);
     }
 
