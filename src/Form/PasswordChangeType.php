@@ -36,16 +36,8 @@ class PasswordChangeType extends AbstractType
                         'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères',
                     ]),
                     new Regex([
-                        'pattern' => '/[A-Z]/',
-                        'message' => 'Votre mot de passe doit contenir au moins une majuscule',
-                    ]),
-                    new Regex([
-                        'pattern' => '/[a-z]/',
-                        'message' => 'Votre mot de passe doit contenir au moins une minuscule',
-                    ]),
-                    new Regex([
-                        'pattern' => '/[@!&$€*%ù]/',
-                        'message' => 'Votre mot de passe doit contenir au moins un caractère spécial (@!&$€*%ù)',
+                        'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@!&$€*%ù]).{8,}$/',
+                        'message' => 'Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial (@!&$€*%ù)',
                     ]),
                     new NotCompromisedPassword(),
                 ],
