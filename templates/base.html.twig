@@ -84,6 +84,8 @@
                             <li><a class="dropdown-item" href="{{path('app_specialite')}}">Specialités</a></li>
                             </ul>
                         </li>
+
+
                     {% endif %}
 
                     {% if is_granted('ROLE_ADMIN') %}
@@ -99,7 +101,14 @@
                         </li>
                     {% endif %}
                     
-
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle {{controller_name == 'OtherController' ? 'active' : '' }}" href="{{path('app_direction')}}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Profil
+                        </a>
+                        <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{path('app_change_password')}}">Modifier le mot de passe</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link " href="{{path('app_logout')}}">Se Déconnecter</a></li>
                   {% else %}
                     <li class="nav-item"><a class="nav-link {{controller_name == 'SecurityController' ? 'active' : '' }}" href="{{path('app_login')}}">Se Connecter</a></li>
@@ -109,6 +118,14 @@
               </div>
             </div>
           </nav>
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+
         {% block body %}
 
         {% endblock %}
