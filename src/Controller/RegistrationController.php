@@ -8,13 +8,14 @@ use App\Security\EmailVerifier;
 use App\Form\PasswordChangeType;
 use App\Repository\TopRepository;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ParrainRepository;
 use App\Repository\DirectionRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -111,8 +112,15 @@ class RegistrationController extends AbstractController
     }
 
     #[Route(path: '/resetmdp-{id_role}-{role}', name: 'app_resetmdp')]
-    public function resetMDP(int $id_role, string $role ,UserPasswordHasherInterface $passwordHasher,UserRepository $userRepository , EntityManagerInterface $entityManager): Response
+    public function resetMDP(int $id_role, string $role ,UserPasswordHasherInterface $passwordHasher,UserRepository $userRepository , EntityManagerInterface $entityManager,Security $security): Response
     {
+        $currentUser = $security->getUser();
+        // Vérifier si l'utilisateur est connecté et s'il a le rôle ROLE_ADMIN
+        if (!$currentUser || !in_array('ROLE_ADMIN', $currentUser->getRoles())) {
+            $this->addFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
+            return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+        }
+
         if ($role=='parrain') {
             $role = 'ROLE_PARRAIN';
         }elseif ($role=='top') {
