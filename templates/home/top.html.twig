@@ -89,7 +89,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if filleul.topAppreciations | length < 2 %}
+                                {% if filleul.topAppreciations | length < 4 %}
                                     <a href="{{path('appreciation.top.new',{idTop:user.id,idFilleul:filleul.id})}}"><i class="fa-solid fa-plus" style="color: #3eec32;"></i></a>
                                 {% endif %}
                                 {% if filleul.topAppreciations | length >= 1 %}

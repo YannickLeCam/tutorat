@@ -3,6 +3,7 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -16,6 +17,7 @@ class PasswordChangeType extends AbstractType
     {
         $builder
             ->add('oldPassword', PasswordType::class, [
+                'attr' => ['class' => 'form-control'],
                 'label' => 'Ancien mot de passe',
                 'mapped' => false,
                 'constraints' => [
@@ -23,8 +25,10 @@ class PasswordChangeType extends AbstractType
                         'message' => 'Veuillez entrer votre ancien mot de passe',
                     ]),
                 ],
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('newPassword', PasswordType::class, [
+                'attr' => ['class' => 'form-control'],
                 'label' => 'Nouveau mot de passe',
                 'mapped' => false,
                 'constraints' => [
@@ -40,9 +44,11 @@ class PasswordChangeType extends AbstractType
                         'message' => 'Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial (@!&$€*%ù)',
                     ]),
                     new NotCompromisedPassword(),
+                    
                 ],
             ])
             ->add('confirmPassword', PasswordType::class, [
+                'attr' => ['class' => 'form-control'],
                 'label' => 'Confirmez le nouveau mot de passe',
                 'mapped' => false,
                 'constraints' => [
@@ -50,6 +56,10 @@ class PasswordChangeType extends AbstractType
                         'message' => 'Veuillez confirmer votre mot de passe',
                     ]),
                 ],
+                
+            ])
+            ->add('Valider', SubmitType::class,[
+                'attr' => ['class' => 'btn btn-primary'],
             ])
         ;
     }
