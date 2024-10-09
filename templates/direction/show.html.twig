@@ -7,7 +7,7 @@
         <h1>{{direction.nom}} {{direction.prenom}}</h1>
         <h2>Vient de la facultée : {{direction.faculte.name}}</h2>
         {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{path('app_resetmdp',{id_role:direction.id,role:"direction"})}}"></a>
+            <a class="btn btn-primary" href="{{path('app_resetmdp',{id_role:direction.id,role:"direction"})}}">Rénitialisation du compte</a>
         {% endif %}
     </div>
 

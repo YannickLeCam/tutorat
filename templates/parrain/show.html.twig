@@ -58,7 +58,7 @@
             <p>Le parrain n'a pas encore de filleul relier</p>
         {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
-            <a class="btn btn-primary" href="{{path('app_resetmdp',{id_role:parrain.id,role:"parrain"})}}">Reset</a>
+            <a class="btn btn-primary" href="{{path('app_resetmdp',{id_role:parrain.id,role:"parrain"})}}">Rénitialisation du compte</a>
         {% endif %}
     </div>
 
