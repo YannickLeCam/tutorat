@@ -40,7 +40,7 @@
                             <td>
                                 <a href="{{path('appreciation.edit',{id:filleul.parrainAppreciations|last.id})}}"><i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i></a>
                             
-                            {% if filleul.parrainAppreciations | length < 13 %}
+                            {% if filleul.parrainAppreciations | length < 30 %}
                                 <a href="{{path('appreciation.new',{idFilleul:filleul.id,idParrain:user.id})}}"><i class="fa-solid fa-plus" style="color: #3eec32;"></i></a>
                             {% endif %}
                             </td>
