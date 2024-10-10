@@ -6,8 +6,12 @@
     <div id="wrapper">
         <h1><span id="presentation">{{parrain.nom}} {{parrain.prenom}}</span></h1>
 
+        {% if is_granted('ROLE_TOP') or is_granted('ROLE_DIRECTION') %}
+            <p>le superviseur est <a href="{{path('app_top.show',{id:parrain.top.id})}}">{{parrain.top.nom}} {{parrain.top.prenom}}</a></p>
+        {% else %}
+            <p>le superviseur est <span id="presentation">{{parrain.top.nom}} {{parrain.top.prenom}}</span></p>
+        {% endif %}
 
-        <p>le superviseur est <a href="{{path('app_top.show',{id:parrain.top.id})}}">{{parrain.top.nom}} {{parrain.top.prenom}}</a></p>
 
         {% if parrain.filleuls | length > 0 %}
         <table class="table table-striped table-hover">
