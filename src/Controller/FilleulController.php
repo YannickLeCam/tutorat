@@ -74,9 +74,19 @@ class FilleulController extends AbstractController
     }
 
     #[Route('/filleul/show-{id}', name: 'app_filleul.show')]
-    public function show(Filleul $filleul, TopRepository $topRepository , ParrainRepository $parrainRepository,DirectionRepository $directionRepository):Response{
-        $user = $this->getUser();
+    public function show(int $id,FilleulRepository $filleulRepository ,TopRepository $topRepository , ParrainRepository $parrainRepository,DirectionRepository $directionRepository):Response{
+        
+        $user = $this->getUser();   
         if ($user) {
+            // Rechercher le filleul par son ID
+            $filleul = $filleulRepository->find($id);
+
+            // Vérifier si le filleul n'existe pas
+            if ($filleul === null) {
+                $this->addFlash('error', 'Le filleul ne semble ne plus exister ou n\'existe pas.');
+                return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+            }
+
             $role = $user->getRoles();
             
             if ($role[0] === 'ROLE_PARRAIN') {
@@ -99,6 +109,9 @@ class FilleulController extends AbstractController
             }else {
                 //Message d'erreur ... Suspect
             }
+        }else {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
         }
         return $this->render('filleul/show.html.twig', [
             'controller_name' => 'FilleulController',

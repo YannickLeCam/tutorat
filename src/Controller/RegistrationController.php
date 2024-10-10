@@ -84,7 +84,8 @@ class RegistrationController extends AbstractController
         }elseif ($role == 'direction') {
             $role = 'ROLE_DIRECTION';
         }else {
-            //ERROR
+            $this->addFlash('error', 'Vous tentez de faire quelque chose de suspect . . .');
+            return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
         }
         
         $users = $userRepository->createQueryBuilder('u')
