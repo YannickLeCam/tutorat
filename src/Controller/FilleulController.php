@@ -124,31 +124,42 @@ class FilleulController extends AbstractController
     #[Route('/filleul/edit-{id}', name: 'app_filleul.edit')]
     public function new(Filleul $filleul = null, Request $request, EntityManagerInterface $em): Response
     {
-        $isEdit = $filleul !== null;
+        $user = $this->getUser();   
+        if ($user) {
+            $role = $user->getRoles();
+            if ($role[0] !== 'ROLE_ADMIN' && $role[0] !== 'ROLE_DIRECTION') {
+                $this->addFlash('error', 'Vous n\'avez pas accès a cette page . . .');
+                return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+            }
+            $isEdit = $filleul !== null;
 
-        if (!$isEdit) {
-            $filleul = new Filleul();
-        }
+            if (!$isEdit) {
+                $filleul = new Filleul();
+            }
 
-        $top = null;
-        if ($isEdit && $filleul->getParrain()) {
-            $top = $filleul->getParrain()->getTop();
-        }
+            $top = null;
+            if ($isEdit && $filleul->getParrain()) {
+                $top = $filleul->getParrain()->getTop();
+            }
 
-        $form = $this->createForm(NouvFilleulType::class, $filleul, [
-            'edit_mode' => $isEdit,
-            'top' => $top,
-        ]);
+            $form = $this->createForm(NouvFilleulType::class, $filleul, [
+                'edit_mode' => $isEdit,
+                'top' => $top,
+            ]);
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $newFilleul = $form->getData();
-            $em->persist($newFilleul);
-            $em->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $newFilleul = $form->getData();
+                $em->persist($newFilleul);
+                $em->flush();
 
-            $this->addFlash('success', 'Vous avez bien ajouté un nouveau filleul !');
-            return $this->redirectToRoute('app_home');
+                $this->addFlash('success', 'Vous avez bien ajouté un nouveau filleul !');
+                return $this->redirectToRoute('app_home');
+            }
+        }else {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
         }
 
         return $this->render('filleul/new.html.twig', [
