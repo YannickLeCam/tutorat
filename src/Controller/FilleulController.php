@@ -20,47 +20,58 @@ class FilleulController extends AbstractController
     #[Route('/filleul', name: 'app_filleul')]
     public function indexFilleul(Request $request, FilleulRepository $filleulRepository): Response
     {
-        // Créer le formulaire de recherche
-        $formRecherche = $this->createForm(RechercheFilleulFormType::class, new Filleul());
-        $formRecherche->handleRequest($request);
-
-        $criteria = [];
-        if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
-            // Récupérer les données du formulaire
-            $data = $formRecherche->getData();
-
-            // Ajouter les critères en fonction des champs remplis
-            if ($data->getNom()) {
-                $criteria['nom'] = $data->getNom();
+        $user = $this->getUser();   
+        if ($user) {
+            $role = $user->getRoles();
+            if ($role[0] !== 'ROLE_ADMIN' && $role[0] !== 'ROLE_DIRECTION') {
+                $this->addFlash('error', 'Vous n\'avez pas accès a cette page . . .');
+                return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
             }
+            // Créer le formulaire de recherche
+            $formRecherche = $this->createForm(RechercheFilleulFormType::class, new Filleul());
+            $formRecherche->handleRequest($request);
 
-            if ($data->getPrenom()) {
-                $criteria['prenom'] = $data->getPrenom();
-            }
+            $criteria = [];
+            if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
+                // Récupérer les données du formulaire
+                $data = $formRecherche->getData();
 
-            if ($data->getMail()) {
-                $criteria['mail'] = $data->getMail();
-            }
+                // Ajouter les critères en fonction des champs remplis
+                if ($data->getNom()) {
+                    $criteria['nom'] = $data->getNom();
+                }
 
-            if ($data->getTelephone()) {
-                $criteria['telephone'] = $data->getTelephone();
-            }
+                if ($data->getPrenom()) {
+                    $criteria['prenom'] = $data->getPrenom();
+                }
 
-            if ($data->getMineure()) {
-                $criteria['mineure'] = $data->getMineure();
-            }
+                if ($data->getMail()) {
+                    $criteria['mail'] = $data->getMail();
+                }
 
-            if ($data->getSpecialite()) {
-                $criteria['specialite'] = $data->getSpecialite();
-            }
+                if ($data->getTelephone()) {
+                    $criteria['telephone'] = $data->getTelephone();
+                }
 
-            if ($data->getParrain()) {
-                $criteria['parrain'] = $data->getParrain();
-            }
+                if ($data->getMineure()) {
+                    $criteria['mineure'] = $data->getMineure();
+                }
 
-            if ($data->getFaculte()) {
-                $criteria['faculte'] = $data->getFaculte();
+                if ($data->getSpecialite()) {
+                    $criteria['specialite'] = $data->getSpecialite();
+                }
+
+                if ($data->getParrain()) {
+                    $criteria['parrain'] = $data->getParrain();
+                }
+
+                if ($data->getFaculte()) {
+                    $criteria['faculte'] = $data->getFaculte();
+                }
             }
+        }else {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
         }
 
         // Utiliser findBy avec les critères
