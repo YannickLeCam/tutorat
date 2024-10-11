@@ -14,14 +14,34 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ParrainController extends AbstractController
 {
     #[Route('/parrain/show-{id}',name:'app_parrain.show')]
-    public function show(Parrain $parrain):Response
+    public function show(int $id, ParrainRepository $parrainRepository):Response
     {
+    $user = $this->getUser();   
+    if ($user) { 
+        // Rechercher le filleul par son ID
+        $parrain = $parrainRepository->find($id);
+
+        // Vérifier si le filleul n'existe pas
+        if ($parrain === null) {
+            $this->addFlash('error', 'Le filleul ne semble ne plus exister ou n\'existe pas.');
+            return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+        }
+
+        $role = $user->getRoles();
+        
+        if ($role[0] === 'ROLE_PARRAIN') {
+            $this->addFlash('error', 'Vous n\'avez pas les permissions pour accéder a cette page.');
+            return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+        }
+    }else {
+        $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+        return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
+    }
         return $this->render('parrain/show.html.twig', [
             'controller_name' => 'ParrainController',
             'parrain' => $parrain,
