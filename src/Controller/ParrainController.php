@@ -9,6 +9,7 @@ use App\Form\RapportParrainType;
 use App\Form\RechercheParrainType;
 use App\Entity\ParrainAppreciation;
 use App\Repository\FilleulRepository;
+use App\Repository\ParrainAppreciationRepository;
 use App\Repository\ParrainRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -131,13 +132,19 @@ class ParrainController extends AbstractController
         ]);
     }
     #[Route('/appreciation/edit-{id}', name: 'appreciation.edit',requirements : ['id'=>'\d+'])]
-    public function editAppreciation(ParrainAppreciation $appreciation = null,Request $request,EntityManagerInterface $em,ParrainRepository $parrainRepository,FilleulRepository $filleulRepository): Response
+    public function editAppreciation(int $id,ParrainAppreciationRepository $parrainAppreciationRepository,Request $request,EntityManagerInterface $em,ParrainRepository $parrainRepository,FilleulRepository $filleulRepository): Response
     {
          // Vérifier si l'utilisateur est connecté
         if (!$this->isGranted('ROLE_USER')) {
             return $this->redirectToRoute('app_login');
         }
         
+        $appreciation= $parrainAppreciationRepository->find($id);
+        if ($appreciation==null) {
+            $this->addFlash('error','L\'appreciation ne semble pas exister.');
+            return $this->redirectToRoute('app_home');
+        }
+
         $form = $this->createForm(RapportParrainType::class , $appreciation);
         $form->handleRequest($request);
         
