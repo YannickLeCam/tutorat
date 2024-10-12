@@ -52,22 +52,33 @@ class ParrainController extends AbstractController
     #[Route('/parrain/edit-{id}', name: 'app_parrain.edit')]
     public function new(Parrain $parrain = null, Request $request, EntityManagerInterface $em): Response
     {
-        // Faire une vérification que l'utilisateur est bien un Admin ou un membre de la direction
-        if (!$parrain) {
-            $parrain = new Parrain();
-        }
+        $user = $this->getUser();   
+        if ($user) { 
+            $role = $user->getRoles();
+            if ($role[0] !== 'ROLE_ADMIN' && $role[0] !== 'ROLE_DIRECTION') {
+                $this->addFlash('error', 'Vous n\'avez pas accès a cette page . . .');
+                return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+            }
+            // Faire une vérification que l'utilisateur est bien un Admin ou un membre de la direction
+            if (!$parrain) {
+                $parrain = new Parrain();
+            }
 
-        $form = $this->createForm(NouvParrainType::class, $parrain);
-        $form->handleRequest($request);
+            $form = $this->createForm(NouvParrainType::class, $parrain);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $newParrain = $form->getData();
-            $em->persist($newParrain);
-            $em->flush();
-            $this->addFlash('success', 'Vous avez bien ajouté un nouveau parrain !');
-            return $this->redirectToRoute('app_home');
-        } else {
-            $this->addFlash('error', 'Il semble y avoir eu une erreur lors de l\'ajout du parrain');
+            if ($form->isSubmitted() && $form->isValid()) {
+                $newParrain = $form->getData();
+                $em->persist($newParrain);
+                $em->flush();
+                $this->addFlash('success', 'Vous avez bien ajouté un nouveau parrain !');
+                return $this->redirectToRoute('app_home');
+            } else {
+                $this->addFlash('error', 'Il semble y avoir eu une erreur lors de l\'ajout du parrain');
+            }
+        }else {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
         }
 
         return $this->render('parrain/new.html.twig', [
