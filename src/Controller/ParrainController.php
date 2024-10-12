@@ -165,35 +165,48 @@ class ParrainController extends AbstractController
     #[Route('/parrain', name: 'app_parrain')]
     public function index(Request $request, ParrainRepository $parrainRepository): Response
     {
-        // Créer le formulaire de recherche
-        $formRecherche = $this->createForm(RechercheParrainType::class, new Parrain());
-        $formRecherche->handleRequest($request);
+        $user = $this->getUser();   
+        if ($user) {
+            $role = $user->getRoles();
+            if ($role[0] !== 'ROLE_ADMIN' && $role[0] !== 'ROLE_DIRECTION') {
+                $this->addFlash('error', 'Vous n\'avez pas accès a cette page . . .');
+                return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+            }
+            
+            // Créer le formulaire de recherche
+            $formRecherche = $this->createForm(RechercheParrainType::class, new Parrain());
+            $formRecherche->handleRequest($request);
 
-        $criteria = [];
-        if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
-            // Récupérer les données du formulaire
-            $data = $formRecherche->getData();
+            $criteria = [];
+            if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
+                // Récupérer les données du formulaire
+                $data = $formRecherche->getData();
 
-            // Ajouter les critères en fonction des champs remplis
-            if ($data->getNom()) {
-                $criteria['nom'] = $data->getNom();
+                // Ajouter les critères en fonction des champs remplis
+                if ($data->getNom()) {
+                    $criteria['nom'] = $data->getNom();
+                }
+
+                if ($data->getPrenom()) {
+                    $criteria['prenom'] = $data->getPrenom();
+                }
+
+                if ($data->getTop()) {
+                    $criteria['top'] = $data->getTop();
+                }
+
+                if ($data->getFaculte()) {
+                    $criteria['faculte'] = $data->getFaculte();
+                }
             }
 
-            if ($data->getPrenom()) {
-                $criteria['prenom'] = $data->getPrenom();
-            }
 
-            if ($data->getTop()) {
-                $criteria['top'] = $data->getTop();
-            }
-
-            if ($data->getFaculte()) {
-                $criteria['faculte'] = $data->getFaculte();
-            }
+            // Utiliser findBy avec les critères
+            $parrains = $parrainRepository->searchParrains($criteria);
+        }else {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
         }
-
-        // Utiliser findBy avec les critères
-        $parrains = $parrainRepository->searchParrains($criteria);
 
         return $this->render('parrain/index.html.twig', [
             'controller_name' => 'ParrainController',
