@@ -45,14 +45,6 @@ class FilleulController extends AbstractController
                     $criteria['prenom'] = $data->getPrenom();
                 }
 
-                if ($data->getMail()) {
-                    $criteria['mail'] = $data->getMail();
-                }
-
-                if ($data->getTelephone()) {
-                    $criteria['telephone'] = $data->getTelephone();
-                }
-
                 if ($data->getMineure()) {
                     $criteria['mineure'] = $data->getMineure();
                 }
