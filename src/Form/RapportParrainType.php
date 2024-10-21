@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\ParrainAppreciation;
@@ -8,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class RapportParrainType extends AbstractType
 {
@@ -28,7 +29,6 @@ class RapportParrainType extends AbstractType
                 ],
                 'expanded' => true, // Renders as radio buttons
                 'multiple' => false,
-                'data' => 3, // Pré-sélectionner la valeur 3
                 'required' => true, // Champ obligatoire
                 'attr' => ['class' => 'd-flex justify-content-center'], // Centre les radios
             ])
@@ -42,7 +42,6 @@ class RapportParrainType extends AbstractType
                 ],
                 'expanded' => true, // Renders as radio buttons
                 'multiple' => false,
-                'data' => 3, // Pré-sélectionner la valeur 3
                 'required' => true, // Champ obligatoire
                 'attr' => ['class' => 'd-flex justify-content-center'], // Centre les radios
             ])
@@ -50,6 +49,21 @@ class RapportParrainType extends AbstractType
                 'attr' => ['class' => 'btn btn-primary'],
             ])
         ;
+
+        // Ajoutez un écouteur d'événements pour le formulaire
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $data = $event->getData();
+            $form = $event->getForm();
+
+            // Vérifiez si les valeurs sont nulles et définissez la valeur par défaut
+            if ($data->getHumeur() === null) {
+                $form->get('humeur')->setData(3);
+            }
+
+            if ($data->getTravail() === null) {
+                $form->get('travail')->setData(3);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
