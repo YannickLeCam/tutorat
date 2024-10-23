@@ -21,7 +21,18 @@ class TopController extends AbstractController
     #[Route('/top/show-{id}',name:'app_top.show')]
     public function show(Top $top, TopRepository $topRepository):Response
     {
-        $filleuls = $topRepository->findAllFilleuls($top->getId());
+        $user = $this->getUser();   
+        if ($user) {
+            $role = $user->getRoles();
+            if ($role[0] !== 'ROLE_ADMIN' && $role[0] !== 'ROLE_DIRECTION') {
+                $this->addFlash('error', 'Vous n\'avez pas accès a cette page . . .');
+                return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+            }
+            $filleuls = $topRepository->findAllFilleuls($top->getId());
+        }else {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
+        }
         return $this->render('top/show.html.twig', [
             'controller_name' => 'TopController',
             'top' => $top,
