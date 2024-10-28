@@ -117,31 +117,37 @@ class TopController extends AbstractController
     #[Route('/top', name: 'app_top')]
     public function index(Request $request, TopRepository $topRepository): Response
     {
-        // Créer le formulaire de recherche
-        $formRecherche = $this->createForm(RechercheTopType::class, new Top());
-        $formRecherche->handleRequest($request);
+        $user = $this->getUser();   
+        if ($user) {
+            // Créer le formulaire de recherche
+            $formRecherche = $this->createForm(RechercheTopType::class, new Top());
+            $formRecherche->handleRequest($request);
 
-        $criteria = [];
-        if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
-            // Récupérer les données du formulaire
-            $data = $formRecherche->getData();
+            $criteria = [];
+            if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
+                // Récupérer les données du formulaire
+                $data = $formRecherche->getData();
 
-            // Ajouter les critères en fonction des champs remplis
-            if ($data->getNom()) {
-                $criteria['nom'] = $data->getNom();
+                // Ajouter les critères en fonction des champs remplis
+                if ($data->getNom()) {
+                    $criteria['nom'] = $data->getNom();
+                }
+
+                if ($data->getPrenom()) {
+                    $criteria['prenom'] = $data->getPrenom(); 
+                }
+
+                if ($data->getFaculte()) {
+                    $criteria['faculte'] = $data->getFaculte();
+                }
             }
 
-            if ($data->getPrenom()) {
-                $criteria['prenom'] = $data->getPrenom(); 
-            }
-
-            if ($data->getFaculte()) {
-                $criteria['faculte'] = $data->getFaculte();
-            }
+            // Utiliser findBy avec les critères
+            $tops = $topRepository->searchTops($criteria);
+        }else {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
         }
-
-        // Utiliser findBy avec les critères
-        $tops = $topRepository->searchTops($criteria);
 
         return $this->render('top/index.html.twig', [
             'controller_name' => 'TopController',
