@@ -51,6 +51,7 @@ class TopController extends AbstractController
                 $this->addFlash('error', 'Vous n\'avez pas accès a cette page . . .');
                 return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
             }
+
             // Faire une vérification que l'utilisateur est bien un Admin ou un membre de la direction
             if (!$top) {
                 $top = new Top();
@@ -83,25 +84,30 @@ class TopController extends AbstractController
     #[Route('top/appreciation/edit-{id}', name: 'appreciation.top.edit',requirements : ['id'=>'\d+'])]
     public function newAppreciation(TopAppreciation $appreciation = null,int $idTop = null,int $idFilleul = null,Request $request,EntityManagerInterface $em,TopRepository $topRepository,FilleulRepository $filleulRepository): Response
     {
-        if (!$appreciation) {
-            $appreciation = new TopAppreciation();
-            $top = $topRepository->findOneBy(['id'=>$idTop]);
-            $appreciation->setTop($top);
-            $filleul = $filleulRepository->findOneBy(['id'=>$idFilleul]);
-            $appreciation->setFilleul($filleul);
-            $appreciation->setDateCreation(new DateTime());
+        $user = $this->getUser();   
+        if ($user) {
+            if (!$appreciation) {
+                $appreciation = new TopAppreciation();
+                $top = $topRepository->findOneBy(['id'=>$idTop]);
+                $appreciation->setTop($top);
+                $filleul = $filleulRepository->findOneBy(['id'=>$idFilleul]);
+                $appreciation->setFilleul($filleul);
+                $appreciation->setDateCreation(new DateTime());
+            }
+            $form = $this->createForm(RapportTopType::class , $appreciation);
+            $form->handleRequest($request);
+            
+            if ($form->isSubmitted() && $form->isValid() ) {
+                $newAppreciation= $form->getData();
+                $em->persist($newAppreciation);
+                $em->flush();
+                $this->addFlash('success','Vous avez bien ajouté votre appréciation !');
+                return $this->redirectToRoute('app_home');
+            }
+        }else {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
         }
-        $form = $this->createForm(RapportTopType::class , $appreciation);
-        $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid() ) {
-            $newAppreciation= $form->getData();
-            $em->persist($newAppreciation);
-            $em->flush();
-            $this->addFlash('success','Vous avez bien ajouté votre appréciation !');
-            return $this->redirectToRoute('app_home');
-        }
-
         return $this->render('top/appreciation.html.twig', [
             'controller_name' => 'Appreciation',
             'form'=>$form,
