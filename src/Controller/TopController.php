@@ -119,6 +119,11 @@ class TopController extends AbstractController
     {
         $user = $this->getUser();   
         if ($user) {
+            $role = $user->getRoles();
+            if ($role[0] !== 'ROLE_ADMIN' && $role[0] !== 'ROLE_DIRECTION') {
+                $this->addFlash('error', 'Vous n\'avez pas accès a cette page . . .');
+                return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+            }
             // Créer le formulaire de recherche
             $formRecherche = $this->createForm(RechercheTopType::class, new Top());
             $formRecherche->handleRequest($request);
