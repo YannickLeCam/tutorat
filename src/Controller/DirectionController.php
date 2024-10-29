@@ -129,6 +129,7 @@ public function deleteMineur(
     Mineure $mineure,
     EntityManagerInterface $entityManager
 ): Response {
+    
     try {
         $entityManager->remove($mineure);
         $entityManager->flush();
