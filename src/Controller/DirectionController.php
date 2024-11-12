@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTime;
 use App\Entity\Filleul;
 use App\Entity\Mineure;
+use App\Entity\Parrain;
 use App\Entity\Direction;
 use App\Entity\Specialite;
 use App\Form\NouvMineurType;
@@ -12,11 +13,13 @@ use App\Form\NouvDirectionType;
 use Doctrine\ORM\EntityManager;
 use App\Form\NouvSpecialiteType;
 use App\Form\RapportDirectionType;
+use App\Form\RechercheParrainType;
 use App\Form\FilleulAssignmentType;
 use App\Form\RechercheDirectionType;
 use App\Entity\DirectionAppreciation;
 use App\Repository\FilleulRepository;
 use App\Repository\MineureRepository;
+use App\Repository\ParrainRepository;
 use App\Repository\DirectionRepository;
 use App\Repository\SpecialiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -275,6 +278,60 @@ public function deleteMineur(
         $this->addFlash('sucess','Vous avez bien supprimé la spécialité !');
 
         return $this->redirectToRoute('app_speciallite');
+    }
+
+    #[Route('/direction/compta', name: 'app_compta')]
+    public function compta(Request $request,ParrainRepository $parrainRepository): Response
+    {
+        $user = $this->getUser();   
+        if ($user) {
+            $role = $user->getRoles();
+            if ($role[0] !== 'ROLE_ADMIN' && $role[0] !== 'ROLE_DIRECTION') {
+                $this->addFlash('error', 'Vous n\'avez pas accès a cette page . . .');
+                return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+            }
+            
+            // Créer le formulaire de recherche
+            $formRecherche = $this->createForm(RechercheParrainType::class, new Parrain());
+            $formRecherche->handleRequest($request);
+
+            $criteria = [];
+            if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
+                // Récupérer les données du formulaire
+                $data = $formRecherche->getData();
+
+                // Ajouter les critères en fonction des champs remplis
+                if ($data->getNom()) {
+                    $criteria['nom'] = $data->getNom();
+                }
+
+                if ($data->getPrenom()) {
+                    $criteria['prenom'] = $data->getPrenom();
+                }
+
+                if ($data->getTop()) {
+                    $criteria['top'] = $data->getTop();
+                }
+
+                if ($data->getFaculte()) {
+                    $criteria['faculte'] = $data->getFaculte();
+                }
+            }
+
+
+            // Utiliser findBy avec les critères
+            $parrains = $parrainRepository->searchParrains($criteria);
+        }else {
+            $this->addFlash('error', 'Vous devez être connecté pour accéder a cette page . . .');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page d'accueil ou une autre page appropriée
+        }
+        
+
+        return $this->render('direction/compta.html.twig', [
+            'controller_name' => 'OtherController',
+            'parrains'=>$parrains,
+            'formRecherche' => $formRecherche->createView(),
+        ]);
     }
 
     #[Route('/direction', name: 'app_direction')]
