@@ -48,10 +48,17 @@ class Filleul
     #[ORM\OneToMany(targetEntity: TopAppreciation::class, mappedBy: 'filleul')]
     private Collection $topAppreciations;
 
+    /**
+     * @var Collection<int, NoteEtudiant>
+     */
+    #[ORM\OneToMany(targetEntity: NoteEtudiant::class, mappedBy: 'filleul')]
+    private Collection $noteEtudiants;
+
     public function __construct()
     {
         $this->parrainAppreciations = new ArrayCollection();
         $this->topAppreciations = new ArrayCollection();
+        $this->noteEtudiants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -185,6 +192,36 @@ class Filleul
             // set the owning side to null (unless already changed)
             if ($topAppreciation->getFilleul() === $this) {
                 $topAppreciation->setFilleul(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NoteEtudiant>
+     */
+    public function getNoteEtudiants(): Collection
+    {
+        return $this->noteEtudiants;
+    }
+
+    public function addNoteEtudiant(NoteEtudiant $noteEtudiant): static
+    {
+        if (!$this->noteEtudiants->contains($noteEtudiant)) {
+            $this->noteEtudiants->add($noteEtudiant);
+            $noteEtudiant->setFilleul($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNoteEtudiant(NoteEtudiant $noteEtudiant): static
+    {
+        if ($this->noteEtudiants->removeElement($noteEtudiant)) {
+            // set the owning side to null (unless already changed)
+            if ($noteEtudiant->getFilleul() === $this) {
+                $noteEtudiant->setFilleul(null);
             }
         }
 
