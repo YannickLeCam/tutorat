@@ -282,16 +282,29 @@ public function deleteMineur(
 
             // Traitement du fichier CSV ou TSV
             $rows = [];
-            while (($row = fgetcsv($stream, 0, ";")) !== false) { // Remplace "," par "\t" pour TSV
+            while (($row = fgetcsv($stream, 0, ";")) !== false) { // Remplace ";" par "\t" pour TSV
                 $rows[] = $row;
             }
             fclose($stream);
 
             // Exemple : Logique de traitement des données du fichier
-            foreach ($rows as $row) {
-                dd($rows);
-                // Effectuer une action pour chaque ligne (par ex., enregistrer dans la base)
-                // $row est un tableau contenant les colonnes de la ligne
+            foreach ($rows as $key => $row) {
+                if ($key === 0) {
+                    $isHeader = false;
+                    foreach ($row as $key => $data) {
+                        if ($data === "Prénom" || "Prenom") {
+                            $isHeader = true;
+                        }
+                    }
+                    if (!$isHeader) {
+                        //mettre la row dans la BDD
+                    }
+                }
+                else {
+                    
+                }
+                dd($row);
+                //mettre la row dans la BDD
             }
 
             $this->addFlash('success', 'Le fichier a été traité avec succès !');
