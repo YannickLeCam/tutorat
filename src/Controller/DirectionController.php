@@ -8,10 +8,12 @@ use App\Entity\Mineure;
 use App\Entity\Parrain;
 use App\Entity\Direction;
 use App\Entity\Specialite;
+use App\Form\ExamFormType;
 use App\Form\NouvMineurType;
 use App\Form\NouvDirectionType;
 use Doctrine\ORM\EntityManager;
 use App\Form\NouvSpecialiteType;
+use App\Form\Model\ExamFormModel;
 use App\Form\RapportDirectionType;
 use App\Form\RechercheParrainType;
 use App\Form\FilleulAssignmentType;
@@ -254,6 +256,50 @@ public function deleteMineur(
         }
 
         return $this->render('direction/specialiteAdd.html.twig', [
+            'controller_name' => 'OtherController',
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/direction/import-note', name: 'app_importNote')]
+    public function importNote(Request $request): Response
+    {
+        $formModel = new ExamFormModel();
+        $form = $this->createForm(ExamFormType::class, $formModel);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $file = $data->file;
+
+            // Lire directement le contenu du fichier
+            $stream = fopen($file->getPathname(), 'r');
+            if ($stream === false) {
+                $this->addFlash('error', 'Impossible de lire le fichier.');
+                return $this->redirectToRoute('exam_form');
+            }
+
+            // Traitement du fichier CSV ou TSV
+            $rows = [];
+            while (($row = fgetcsv($stream, 0, ";")) !== false) { // Remplace "," par "\t" pour TSV
+                $rows[] = $row;
+            }
+            fclose($stream);
+
+            // Exemple : Logique de traitement des données du fichier
+            foreach ($rows as $row) {
+                dd($rows);
+                // Effectuer une action pour chaque ligne (par ex., enregistrer dans la base)
+                // $row est un tableau contenant les colonnes de la ligne
+            }
+
+            $this->addFlash('success', 'Le fichier a été traité avec succès !');
+
+            return $this->redirectToRoute('exam_form');
+            }
+
+        return $this->render('direction/importNote.html.twig', [
             'controller_name' => 'OtherController',
             'form' => $form,
         ]);
