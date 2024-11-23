@@ -36,6 +36,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class DirectionController extends AbstractController
 {
@@ -292,18 +293,18 @@ public function deleteMineur(
                 if ($key === 0) {
                     $isHeader = false;
                     foreach ($row as $key => $data) {
-                        if ($data === "Prénom" || "Prenom") {
+                        if ($data === "Prénom" || $data === "Prenom") {
                             $isHeader = true;
                         }
                     }
                     if (!$isHeader) {
-                        //mettre la row dans la BDD
+                        //ajouter dans la BDD
                     }
                 }
                 else {
-                    
+                    dd($row);
                 }
-                dd($row);
+                
                 //mettre la row dans la BDD
             }
 

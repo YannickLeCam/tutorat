@@ -15,8 +15,12 @@ class ExamFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('examName', TextType::class)
-        ->add('file', FileType::class);
+            ->add('examName', TextType::class)
+            ->add('date', DateType::class, [
+                'widget' => 'single_text', // Utilise <input type="date">
+                'format' => 'yyyy-MM-dd', // Assure que la date est formatée correctement
+            ])
+            ->add('file', FileType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
