@@ -78,7 +78,7 @@ class NoteEtudiant
         return $this->total_points;
     }
 
-    public function setTotalPoints(float $total_points): static
+    public function setTotalPoints(?float $total_points): static
     {
         $this->total_points = $total_points;
 
