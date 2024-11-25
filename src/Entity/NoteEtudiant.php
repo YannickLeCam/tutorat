@@ -108,4 +108,39 @@ class NoteEtudiant
 
         return $this;
     }
+
+    public function __toString()
+    {
+        // Échappe les valeurs pour éviter les failles XSS
+        $nom = htmlspecialchars($this->nom, ENT_QUOTES, 'UTF-8');
+        if ($this->note === null) {
+            $note = "ABS";
+        }else {
+            $note = htmlspecialchars($this->note, ENT_QUOTES, 'UTF-8');
+        }
+        if ($this->rang === null) {
+            $rang = "ABS";
+        }else {
+            $rang = htmlspecialchars($this->rang, ENT_QUOTES, 'UTF-8');
+        }
+        if ($this->total_points === null) {
+            $total_points = "ABS";
+        }else {
+            $total_points = htmlspecialchars($this->total_points, ENT_QUOTES, 'UTF-8');
+        }
+        $date = $this->date->format('d m Y');
+    
+        // Construction de la chaîne HTML avec sprintf pour plus de lisibilité
+        $htmlContent = sprintf(
+            '<td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>',
+            $nom,
+            $date,
+            $note,
+            $total_points,
+            $rang
+            
+        );
+    
+        return $htmlContent;
+    }
 }

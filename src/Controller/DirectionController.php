@@ -276,6 +276,7 @@ public function deleteMineur(
         $file = $data->file;
         $examName = $data->examName;
         $examDate = $data->date;
+        $examFaculte = $data->faculte->getId();
 
 
         // Lire directement le contenu du fichier
@@ -318,6 +319,7 @@ public function deleteMineur(
                 $filleul = $em->getRepository(Filleul::class)->findOneBy([
                     'nom' => $nom,
                     'prenom' => $prenom,
+
                 ]);
 
                 if ($filleul) {
@@ -339,8 +341,8 @@ public function deleteMineur(
             }
         }
 
-        // Ajout des filleuls absents avec une note NULL
-        $allFilleuls = $em->getRepository(Filleul::class)->findAll();
+        // Ajout des filleuls absents de la faculté avec une note NULL
+        $allFilleuls = $filleulRepository->findBy(['faculte' => $examFaculte]);
         foreach ($allFilleuls as $filleul) {
             if (!in_array($filleul->getId(), $processedFilleuls)) {
                 // Le filleul n'a pas été traité : ajouter une note NULL
