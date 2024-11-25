@@ -8,10 +8,13 @@ use App\Entity\Mineure;
 use App\Entity\Parrain;
 use App\Entity\Direction;
 use App\Entity\Specialite;
+use App\Form\ExamFormType;
+use App\Entity\NoteEtudiant;
 use App\Form\NouvMineurType;
 use App\Form\NouvDirectionType;
 use Doctrine\ORM\EntityManager;
 use App\Form\NouvSpecialiteType;
+use App\Form\Model\ExamFormModel;
 use App\Form\RapportDirectionType;
 use App\Form\RechercheParrainType;
 use App\Form\FilleulAssignmentType;
@@ -23,6 +26,7 @@ use App\Repository\ParrainRepository;
 use App\Repository\DirectionRepository;
 use App\Repository\SpecialiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -259,6 +263,113 @@ public function deleteMineur(
         ]);
     }
 
+    #[Route('/direction/import-note', name: 'app_importNote')]
+    public function importNote(Request $request, EntityManagerInterface $em, FilleulRepository $filleulRepository): Response
+    {
+    $formModel = new ExamFormModel();
+    $form = $this->createForm(ExamFormType::class, $formModel);
+
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $data = $form->getData();
+        $file = $data->file;
+        $examName = $data->examName;
+        $examDate = $data->date;
+        $examFaculte = $data->faculte->getId();
+
+
+        // Lire directement le contenu du fichier
+        $stream = fopen($file->getPathname(), 'r');
+        if ($stream === false) {
+            $this->addFlash('error', 'Impossible de lire le fichier.');
+            return $this->redirectToRoute('app_importNote');
+        }
+
+        $rows = [];
+        while (($row = fgetcsv($stream, 0, ";")) !== false) { // Remplace ";" par "\t" pour TSV
+            $rows[] = $row;
+        }
+        fclose($stream);
+
+        // Liste pour marquer les filleuls déjà traités
+        $processedFilleuls = [];
+
+        // Traitement pour chaque ligne du fichier CSV
+        foreach ($rows as $key => $row) {
+            if ($key === 0) {
+                $isHeader = false;
+                foreach ($row as $key => $data) {
+                    if ($data === "Prénom" || $data === "Prenom") {
+                        $isHeader = true;
+                    }
+                }
+                if (!$isHeader) {
+                    //ajouter dans la BDD
+                }
+            }
+            else {
+                $nom = $row[0];
+                $prenom = $row[1];
+                $totalPoints = isset($row[2]) ? (float)str_replace(',', '.', $row[2]) : null;
+                $note = isset($row[3]) ? (float)str_replace(',', '.', $row[3]) : null;
+                $rang = isset($row[4]) ? (int)$row[4] : null;
+
+                // Recherche du filleul correspondant dans la base
+                $filleul = $em->getRepository(Filleul::class)->findOneBy([
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+
+                ]);
+
+                if ($filleul) {
+
+                    // Création ou mise à jour de la note pour le filleul trouvé
+                    $noteEtudiant = new NoteEtudiant();
+                    $noteEtudiant->setNom($examName); //Nom de l'examen
+                    $noteEtudiant->setDate($examDate); // Date d'examen issue du formulaire
+                    $noteEtudiant->setTotalPoints($totalPoints);
+                    $noteEtudiant->setNote($note);
+                    $noteEtudiant->setRang($rang);
+                    $noteEtudiant->setFilleul($filleul);
+
+                    $em->persist($noteEtudiant);
+
+                    // Marquer ce filleul comme traité
+                    $processedFilleuls[] = $filleul->getId();
+                }
+            }
+        }
+
+        // Ajout des filleuls absents de la faculté avec une note NULL
+        $allFilleuls = $filleulRepository->findBy(['faculte' => $examFaculte]);
+        foreach ($allFilleuls as $filleul) {
+            if (!in_array($filleul->getId(), $processedFilleuls)) {
+                // Le filleul n'a pas été traité : ajouter une note NULL
+                $noteEtudiant = new NoteEtudiant();
+                $noteEtudiant->setNom($examName);
+                $noteEtudiant->setDate($examDate); // Date d'examen issue du formulaire
+                $noteEtudiant->setTotalPoints(null);
+                $noteEtudiant->setNote(null);
+                $noteEtudiant->setRang(null);
+                $noteEtudiant->setFilleul($filleul);
+
+                $em->persist($noteEtudiant);
+            }
+        }
+        // Sauvegarde des modifications en base
+        $em->flush();
+
+        $this->addFlash('success', 'Le fichier a été traité avec succès !');
+
+        return $this->redirectToRoute('app_importNote');
+    }
+
+    return $this->render('direction/importNote.html.twig', [
+        'controller_name' => 'OtherController',
+        'form' => $form->createView(),
+    ]);
+}
     #[Route('/direction/specialite', name: 'app_specialite')]
     public function listSpecialite(SpecialiteRepository $specialiteRepository): Response
     {

@@ -150,6 +150,7 @@
                                     {% endif %}
                                 {% else %}
                                     <td rowspan="10">Pas encore d'appréciation du Top</td>
+
                                     {% if is_granted('ROLE_TOP') and user.id == filleul.parrain.top.id %}
                                         <td rowspan="10"><a href="{{path('appreciation.top.new',{idTop:user.id,idFilleul:filleul.id})}}"><i class="fa-solid fa-plus" style="color: #3eec32;"></i></a></td>
                                     {% endif %}
@@ -160,6 +161,32 @@
                 {% endfor %}
             </tbody>
         </table>
+
+
+        <h2>Notes</h2>
+
+        {% if filleul.noteEtudiants|length == 0 %}
+            <p>Pas encore de notes</p>
+        {% else %}
+            <table class="table table-striped table-hover">
+                <thead>
+                    <th>Nom de l'examen</th>
+                    <th>Date</th>
+                    <th>Note</th>
+                    <th>Total de points</th>
+                    <th>Rang</th>
+                </thead>
+                <tbody>
+                    {% for note in filleul.noteEtudiants  %}
+                        <tr>
+                            {{note | raw}}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+
     </div>
 
 
