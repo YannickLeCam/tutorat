@@ -263,6 +263,34 @@ public function deleteMineur(
         ]);
     }
 
+    #[Route('/direction/noteEtudiant/new', name: 'app_noteEtudiant.new')]
+    #[Route('/direction/noteEtudiant/edit-{id}', name: 'app_noteEtudiant.edit')]
+    public function newNoteEtudiant(NoteEtudiant $noteEtudiant = null, Request $request, EntityManagerInterface $em): Response
+    {
+        // Verify that the user is an Admin or a member of the management team
+        if (!$noteEtudiant) {
+            $noteEtudiant = new Specialite();
+        }
+
+        $form = $this->createForm(NouvSpecialiteType::class, $noteEtudiant);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newNoteEtudiant = $form->getData();
+            $em->persist($newNoteEtudiant);
+            $em->flush();
+            $this->addFlash('success', 'Vous avez modifié (ou ajouté) une note d\'étudiant !');
+            return $this->redirectToRoute('app_filleul.show',['id'=> $newNoteEtudiant->getFilleul()->getId()]);
+        } else {
+            $this->addFlash('error', 'An error occurred while adding the direction.');
+        }
+
+        return $this->render('direction/noteEtudiantAdd.html.twig', [
+            'controller_name' => 'OtherController',
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/direction/import-note', name: 'app_importNote')]
     public function importNote(Request $request, EntityManagerInterface $em, FilleulRepository $filleulRepository): Response
     {
