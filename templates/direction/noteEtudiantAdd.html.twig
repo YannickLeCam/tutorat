@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SpecialiteController!{% endblock %}
+
+{% block body %}
+    <div id="wrapper">
+        <h1>Nouvelle spécialité</h1>
+
+        {{ form_start(form, {'attr': {'class': 'form'}}) }}
+
+        <div class="row">
+
+            {{ form_row(form.nom) }}
+            {{ form_row(form.date) }}
+
+        </div>
+
+        
+        <div class="row">
+
+            {{ form_row(form.note) }}
+            {{ form_row(form.total_points) }}
+
+        </div>
+
+
+        <div class="row">
+
+            {{ form_row(form.rang) }}
+            {{ form_row(form.filleul) }}
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 buttonDivForm">
+                {{ form_row(form.Valider) }}
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}

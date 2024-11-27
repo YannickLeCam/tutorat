@@ -20,6 +20,7 @@ use App\Form\RechercheParrainType;
 use App\Form\FilleulAssignmentType;
 use App\Form\RechercheDirectionType;
 use App\Entity\DirectionAppreciation;
+use App\Form\NouvNoteEtudiantType;
 use App\Repository\FilleulRepository;
 use App\Repository\MineureRepository;
 use App\Repository\ParrainRepository;
@@ -263,16 +264,16 @@ public function deleteMineur(
         ]);
     }
 
-    #[Route('/direction/noteEtudiant/new', name: 'app_noteEtudiant.new')]
-    #[Route('/direction/noteEtudiant/edit-{id}', name: 'app_noteEtudiant.edit')]
+    #[Route('/direction/note-etudiant/new', name: 'app_noteEtudiant.new')]
+    #[Route('/direction/note-etudiant/edit-{id}', name: 'app_noteEtudiant.edit')]
     public function newNoteEtudiant(NoteEtudiant $noteEtudiant = null, Request $request, EntityManagerInterface $em): Response
     {
         // Verify that the user is an Admin or a member of the management team
         if (!$noteEtudiant) {
-            $noteEtudiant = new Specialite();
+            $noteEtudiant = new NoteEtudiant();
         }
 
-        $form = $this->createForm(NouvSpecialiteType::class, $noteEtudiant);
+        $form = $this->createForm(NouvNoteEtudiantType::class, $noteEtudiant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
