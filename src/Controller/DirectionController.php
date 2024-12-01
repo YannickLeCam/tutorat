@@ -292,6 +292,20 @@ public function deleteMineur(
         ]);
     }
 
+
+    #[Route('/direction/note-etudiant/delete-{id}', name: 'app_noteEtudiant.edit')]
+    public function delNoteEtudiant(NoteEtudiant $noteEtudiant = null, Request $request, EntityManagerInterface $em): Response
+    {
+        if (!$noteEtudiant) {
+            $this->addFlash('error', 'La note semble pas exister . . .');
+            return $this->redirectToRoute('app_home');
+        }else {
+            $em->remove($noteEtudiant);
+            $em->flush();
+            return $this->redirectToRoute('app_filleul.show',['id'=> $noteEtudiant->getFilleul()->getId()]);
+        }
+    }
+
     #[Route('/direction/import-note', name: 'app_importNote')]
     public function importNote(Request $request, EntityManagerInterface $em, FilleulRepository $filleulRepository): Response
     {
