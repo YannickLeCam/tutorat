@@ -307,7 +307,7 @@ public function deleteMineur(
         }
     }
 
-    #[Route('/direction/note-etudiant/list', name: 'app_noteEtudiant.edit')]
+    #[Route('/direction/note-etudiant/list', name: 'app_noteEtudiant.list')]
     public function listNoteEtudiant(NoteEtudiantRepository $noteEtudiantRepository): Response
     {
         $listExamen = $noteEtudiantRepository->findDistinctExamNames();
@@ -316,6 +316,23 @@ public function deleteMineur(
             'controller_name' => 'OtherController',
             'listExamen' => $listExamen,
         ]);
+    }
+
+    #[Route('/direction/note-etudiant/list-delete-{nomExam}', name: 'app_noteEtudiant.edit')]
+    public function delListNoteEtudiant(string $nomExam, NoteEtudiantRepository $noteEtudiantRepository , EntityManagerInterface $em): Response
+    {
+        //need verification si direction member
+        $examens = $noteEtudiantRepository->findBy(['nom'=>$nomExam]);
+        if (!$examens) {
+            $this->addFlash('error', 'La note semble pas exister . . .');
+            return $this->redirectToRoute('app_noteEtudiant.list');
+        }else {
+            foreach ($examens as $examen) {
+                $em->remove($examen);
+                $em->flush();
+            }
+            return $this->redirectToRoute('app_noteEtudiant.list');
+        }
     }
 
     #[Route('/direction/import-note', name: 'app_importNote')]
