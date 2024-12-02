@@ -16,8 +16,7 @@
                     {% for examen in listExamen|sort((a, b) => a.nom <=> b.nom) %}
                         <tr>
                             <td>{{examen.nom}}</td>
-                            <td></td>
-                            {# <td><a href="{{path('app_noteEtudiant.delList',{id:examen.nom})}}"><i class="fa-solid fa-trash-can" style="color: #ee5044;"></i></a></td> #}
+                            <td><a href="{{path('app_noteEtudiant.delList',{nomExam:examen.nom})}}"><i class="fa-solid fa-trash-can" style="color: #ee5044;"></i></a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

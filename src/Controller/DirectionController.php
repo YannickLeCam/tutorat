@@ -318,7 +318,7 @@ public function deleteMineur(
         ]);
     }
 
-    #[Route('/direction/note-etudiant/list-delete-{nomExam}', name: 'app_noteEtudiant.edit')]
+    #[Route('/direction/note-etudiant/list-delete-{nomExam}', name: 'app_noteEtudiant.delList')]
     public function delListNoteEtudiant(string $nomExam, NoteEtudiantRepository $noteEtudiantRepository , EntityManagerInterface $em): Response
     {
         //need verification si direction member
