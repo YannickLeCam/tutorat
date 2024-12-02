@@ -25,6 +25,7 @@ use App\Repository\FilleulRepository;
 use App\Repository\MineureRepository;
 use App\Repository\ParrainRepository;
 use App\Repository\DirectionRepository;
+use App\Repository\NoteEtudiantRepository;
 use App\Repository\SpecialiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\VarDumper\Cloner\Data;
@@ -304,6 +305,17 @@ public function deleteMineur(
             $em->flush();
             return $this->redirectToRoute('app_filleul.show',['id'=> $noteEtudiant->getFilleul()->getId()]);
         }
+    }
+
+    #[Route('/direction/note-etudiant/list', name: 'app_noteEtudiant.edit')]
+    public function listNoteEtudiant(NoteEtudiantRepository $noteEtudiantRepository): Response
+    {
+        $listExamen = $noteEtudiantRepository->findDistinctExamNames();
+
+        return $this->render('direction/noteEtudiantList.html.twig', [
+            'controller_name' => 'OtherController',
+            'listExamen' => $listExamen,
+        ]);
     }
 
     #[Route('/direction/import-note', name: 'app_importNote')]

@@ -16,6 +16,14 @@ class NoteEtudiantRepository extends ServiceEntityRepository
         parent::__construct($registry, NoteEtudiant::class);
     }
 
+    //Pour faire la liste total des differents types d'examen
+    public function findDistinctExamNames(): array
+    {
+        return $this->createQueryBuilder('n')
+            ->select('DISTINCT n.nom')
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return NoteEtudiant[] Returns an array of NoteEtudiant objects
     //     */
