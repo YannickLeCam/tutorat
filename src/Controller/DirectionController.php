@@ -297,13 +297,22 @@ public function deleteMineur(
     #[Route('/direction/note-etudiant/delete-{id}', name: 'app_noteEtudiant.edit')]
     public function delNoteEtudiant(NoteEtudiant $noteEtudiant = null, Request $request, EntityManagerInterface $em): Response
     {
-        if (!$noteEtudiant) {
-            $this->addFlash('error', 'La note semble pas exister . . .');
-            return $this->redirectToRoute('app_home');
-        }else {
-            $em->remove($noteEtudiant);
-            $em->flush();
-            return $this->redirectToRoute('app_filleul.show',['id'=> $noteEtudiant->getFilleul()->getId()]);
+        $user = $this->getUser();   
+        if ($user) {
+            $role = $user->getRoles();
+            if ($role[0] !== 'ROLE_ADMIN' && $role[0] !== 'ROLE_DIRECTION') {
+                $this->addFlash('error', 'Vous n\'avez pas accès a cette page . . .');
+                return $this->redirectToRoute('app_home'); // Redirige vers la page d'accueil ou une autre page appropriée
+            }
+        
+            if (!$noteEtudiant) {
+                $this->addFlash('error', 'La note semble pas exister . . .');
+                return $this->redirectToRoute('app_home');
+            }else {
+                $em->remove($noteEtudiant);
+                $em->flush();
+                return $this->redirectToRoute('app_filleul.show',['id'=> $noteEtudiant->getFilleul()->getId()]);
+            }
         }
     }
 
